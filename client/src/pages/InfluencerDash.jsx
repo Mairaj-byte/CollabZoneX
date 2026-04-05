@@ -27,24 +27,24 @@ const InfluencerDash = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  const fetchCampaigns = async () => {
-    try {
-      const res = await fetch(
-        `http://localhost:4000/api/campaign/creator/${userId}`
-      );
+    const fetchCampaigns = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:4000/api/campaign/creator/${userId}`
+        );
 
-      const data = await res.json();
+        const data = await res.json();
 
-      setCampaigns(data); // API returns array directly
-    } catch (error) {
-      console.error("Error fetching campaigns:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+        setCampaigns(data); // API returns array directly
+      } catch (error) {
+        console.error("Error fetching campaigns:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (userId) fetchCampaigns();
-}, [userId]);
+    if (userId) fetchCampaigns();
+  }, [userId]);
 
   const totalEarnings = campaigns.reduce(
     (sum, c) => sum + (c.totalBudget || 0),
@@ -133,7 +133,7 @@ const InfluencerDash = () => {
         ) : campaigns.length === 0 ? (
           <p className="text-gray-500">No campaigns available</p>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6">
             {campaigns.map((campaign) => (
               <div
                 key={campaign._id}
@@ -161,6 +161,47 @@ const InfluencerDash = () => {
                     Final ₹{campaign.finalAmount}
                   </span>
                 </div>
+
+                <div className="flex gap-3">
+
+                  {campaign.status === "requested" && (
+                    <>
+                      <button
+                        onClick={() => handleAccept(campaign._id)}
+                        className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+                      >
+                        Accept
+                      </button>
+
+                      <button
+                        onClick={() => handleReject(campaign._id)}
+                        className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
+                      >
+                        Reject
+                      </button>
+                    </>
+                  )}
+
+                  {campaign.status === "accepted" && (
+                    <button
+                      disabled
+                      className="bg-gray-200 text-gray-600 px-4 py-2 rounded-lg cursor-not-allowed"
+                    >
+                      Waiting for Advance
+                    </button>
+                  )}
+
+                  {campaign.status === "advance_paid" && (
+                    <button
+                      onClick={() => openChat(campaign._id)}
+                      className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+                    >
+                      Chat Enabled
+                    </button>
+                  )}
+
+                </div>
+
               </div>
             ))}
           </div>

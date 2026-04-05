@@ -71,7 +71,7 @@ const BrandDash = () => {
 
   return (
     <div className="mt-21 min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 flex">
-      
+
       {/* Overlay for Mobile */}
       {sidebarOpen && (
         <div
@@ -104,11 +104,10 @@ const BrandDash = () => {
                   setActiveTab(item.name);
                   setSidebarOpen(false);
                 }}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${
-                  activeTab === item.name
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${activeTab === item.name
                     ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg"
                     : "hover:bg-gray-100 text-gray-600"
-                }`}
+                  }`}
               >
                 <Icon size={20} />
                 <span className="font-medium">{item.name}</span>
@@ -120,7 +119,7 @@ const BrandDash = () => {
 
       {/* Main */}
       <main className="flex-1 flex flex-col">
-        
+
         {/* Header */}
         <header className="sticky top-0 z-30 bg-white/70 backdrop-blur-xl border-b border-gray-200 px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -206,7 +205,7 @@ const BrandDash = () => {
           <div>
             <h2 className="text-2xl font-bold mb-6">Your Campaigns</h2>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6">
               {campaigns.map((campaign) => (
                 <div
                   key={campaign._id}
@@ -234,6 +233,36 @@ const BrandDash = () => {
                       Final ₹{campaign.finalAmount}
                     </span>
                   </div>
+
+                  <div>
+                    {campaign.status === "pending" && (
+                      <button
+                        disabled
+                        className="bg-gray-200 text-gray-600 px-4 py-2 rounded-lg cursor-not-allowed"
+                      >
+                        Waiting for Creator
+                      </button>
+                    )}
+
+                    {campaign.status === "accepted" && (
+                      <button
+                        onClick={() => handleAdvancePayment(campaign._id)}
+                        className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+                      >
+                        Pay Advance
+                      </button>
+                    )}
+
+                    {campaign.status === "advance_paid" && (
+                      <button
+                        onClick={() => openChat(campaign._id)}
+                        className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+                      >
+                        Chat Enabled
+                      </button>
+                    )}
+                  </div>
+
                 </div>
               ))}
             </div>
