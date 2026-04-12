@@ -53,21 +53,23 @@ const BrandDash = () => {
     { name: "Settings", icon: Settings },
   ];
 
-  useEffect(() => {
-    const fetchCampaigns = async () => {
-      try {
-        const res = await fetch(
-          `http://localhost:4000/api/campaign/brand/${userId}`
-        );
-        const data = await res.json();
-        setCampaigns(data);
-      } catch (error) {
-        console.error("Error fetching campaigns:", error);
-      }
-    };
+ useEffect(() => {
+  if (!userId) return; // 🔥 stop if not ready
 
-    fetchCampaigns();
-  }, [userId]);
+  const fetchCampaigns = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:4000/api/campaign/brand/${userId}`
+      );
+      const data = await res.json();
+      setCampaigns(data);
+    } catch (error) {
+      console.error("Error fetching campaigns:", error);
+    }
+  };
+
+  fetchCampaigns();
+}, [userId]);
 
   return (
     <div className="mt-21 min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 flex">

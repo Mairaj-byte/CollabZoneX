@@ -52,7 +52,7 @@ const InfluencerDash = () => {
   );
 
   return (
-    <div className="min-h-screen px-4 sm:px-6 py-6">
+    <div className="min-h-screen px-4 sm:px-6 py-6 mt-22">
 
       {/* Header */}
       <h1 className="text-2xl font-semibold text-gray-800 mb-6">
