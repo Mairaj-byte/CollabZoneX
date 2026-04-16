@@ -2,21 +2,63 @@ import mongoose from "mongoose";
 
 const paymentSchema = new mongoose.Schema(
   {
-    collaborationId: {
+    campaignId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Collaboration",
+      ref: "Campaign",
       required: true,
     },
-    totalAmount: Number,
-    advancePaid: { type: Boolean, default: false },
-    finalPaid: { type: Boolean, default: false },
+
+    totalAmount: {
+      type: Number,
+      required: true,
+    },
+
+    advanceAmount: {
+      type: Number,
+      required: true,
+    },
+
+    finalAmount: {
+      type: Number,
+      required: true,
+    },
+
+    advancePaid: {
+      type: Boolean,
+      default: false,
+    },
+
+    finalPaid: {
+      type: Boolean,
+      default: false,
+    },
+
     commissionAmount: Number,
     creatorAmount: Number,
+
     paymentStatus: {
       type: String,
-      enum: ["pending", "advance_paid", "completed"],
+      enum: [
+        "pending",
+        "advance_paid",
+        "final_paid",
+        "completed"
+      ],
       default: "pending",
     },
+
+    transactions: [
+      {
+        type: {
+          type: String,
+          enum: ["advance", "final"],
+        },
+        amount: Number,
+        paymentId: String, // Razorpay/Stripe ID
+        status: String,
+        paidAt: Date,
+      },
+    ],
   },
   { timestamps: true }
 );

@@ -10,6 +10,7 @@ import BrandListing from "./pages/BrandListing";
 import InfluencerListing from "./pages/InfluencerListing";
 import InProfileDetail from "./pages/InProfileDetail";
 import BrandProfileSetup from "./pages/BrandProfileSetup";
+import { PaymentPage } from "./pages/PaymentPage";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -50,6 +51,7 @@ const App = () => {
           <Route path="/admindash" element={<AdminDash />} />
           <Route path="/branddash" element={<BrandDash />} />
           <Route path="/influencerdash" element={<InfluencerDash />} />
+          <Route path="/payment-page" element={<PaymentPage />} />
 
 
 

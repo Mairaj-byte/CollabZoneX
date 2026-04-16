@@ -54,13 +54,13 @@ const campaignSchema = new mongoose.Schema(
         "advance_paid",     // advance completed
         "completed"
       ],
-      default: "accepted",
+      default: "requested",
     },
 
-    advancePaid: {
-      type: Boolean,
-      default: false,
-    },
+    paymentId: {
+     type: mongoose.Schema.Types.ObjectId,
+      ref: "Payment"
+      },
 
     chatUnlocked: {
       type: Boolean,

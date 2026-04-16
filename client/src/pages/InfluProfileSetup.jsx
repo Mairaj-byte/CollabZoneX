@@ -28,7 +28,7 @@ const InfluProfileSetup = () => {
     const fetchProfile = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:4000/api/profile/me",
+          "http://localhost:4000/api/creator/me",
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -91,7 +91,7 @@ const InfluProfileSetup = () => {
 
 
       await axios.post(
-        "http://localhost:4000/api/profile",
+        "http://localhost:4000/api/creator",
         data,
         {
           headers: {

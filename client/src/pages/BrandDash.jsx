@@ -46,6 +46,73 @@ const BrandDash = () => {
     },
   ];
 
+  const handleAdvancePayment = async (campaignId, amount) => {
+  try {
+    // 1. Create order from backend
+    const res = await fetch("http://localhost:4000/api/payment/advance/order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        campaignId: campaignId,
+        amount: amount,
+      }),
+    });
+
+    const data = await res.json();
+
+    // 2. Open Razorpay popup
+    const options = {
+      key: "rzp_test_S4wlmSNbitLgNI", // 🔥 replace
+      amount: data.order.amount,
+      currency: "INR",
+      name: "Collab Platform",
+      description: "Advance Payment",
+      order_id: data.order.id,
+
+      handler: async function (response) {
+        // 3. Verify payment
+        const verifyRes = await fetch(
+          "http://localhost:4000/api/payment/advance/verify",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              ...response,
+              campaignId: campaignId,
+              amount: amount,
+            }),
+          }
+        );
+
+        const verifyData = await verifyRes.json();
+
+        if (verifyData.success) {
+          alert("Advance Payment Successful ✅");
+
+          // 🔥 Refresh campaigns
+          window.location.reload();
+        } else {
+          alert("Payment verification failed ❌");
+        }
+      },
+
+      theme: {
+        color: "#6366f1",
+      },
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+  } catch (error) {
+    console.error(error);
+    alert("Payment failed ❌");
+  }
+};
+
   const navItems = [
     { name: "Overview", icon: LayoutDashboard },
     { name: "Analytics", icon: BarChart3 },
@@ -237,18 +304,18 @@ const BrandDash = () => {
                   </div>
 
                   <div>
-                    {campaign.status === "pending" && (
+                    {campaign.status === "requested" && (
                       <button
                         disabled
                         className="bg-gray-200 text-gray-600 px-4 py-2 rounded-lg cursor-not-allowed"
                       >
-                        Waiting for Creator
+                        Waiting for Creator to Respond
                       </button>
                     )}
 
                     {campaign.status === "accepted" && (
                       <button
-                        onClick={() => handleAdvancePayment(campaign._id)}
+                        onClick={() => handleAdvancePayment(campaign._id, campaign.advanceAmount)}
                         className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
                       >
                         Pay Advance

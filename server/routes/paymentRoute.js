@@ -1,42 +1,17 @@
 import express from "express";
 import {
-  makeAdvancePayment,
-  makeFinalPayment,
+  createAdvanceOrder,
+  verifyAdvancePayment,
+  createFinalOrder,
+  verifyFinalPayment,
 } from "../controllers/PaymentController.js";
 
-import Payment from "../models/PaymentModel.js";
+const PaymentRouter = express.Router();
 
-const paymentRouter = express.Router();
+PaymentRouter.post("/advance/order", createAdvanceOrder);
+PaymentRouter.post("/advance/verify", verifyAdvancePayment);
 
-/**
- * Pay Advance
- */
-paymentRouter.post("/advance", makeAdvancePayment);
+PaymentRouter.post("/final/order", createFinalOrder);
+PaymentRouter.post("/final/verify", verifyFinalPayment);
 
-
-/**
- * Pay Final
- */
-paymentRouter.post("/final", makeFinalPayment);
-
-
-/**
- * Get payment by collaboration
- */
-paymentRouter.get("/:collaborationId", async (req, res) => {
-  try {
-    const payment = await Payment.findOne({
-      collaborationId: req.params.collaborationId,
-    });
-
-    if (!payment) {
-      return res.status(404).json({ message: "Payment not found" });
-    }
-
-    res.json(payment);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-export default paymentRouter;
+export default PaymentRouter;

@@ -8,7 +8,6 @@ import userRouter from "./routes/userRoute.js";
 import brandRouter from "./routes/brandRoute.js";
 import paymentRouter from "./routes/paymentRoute.js";
 import campaignRouter from "./routes/campaignRoute.js";
-import collaborationRouter from "./routes/collaborationRoute.js";
 import creatorRouter from "./routes/creatorRoute.js";
 
 const app = express();
@@ -28,10 +27,7 @@ app.use("/api/creator", creatorRouter);
 app.use("/api/brand", brandRouter);
 
 app.use("/api/campaign", campaignRouter);
-app.use("/api/collaboration", collaborationRouter);
 app.use("/api/payment", paymentRouter);
-
-
 
 app.get("/", (req, res) => {
   res.send("API Working");

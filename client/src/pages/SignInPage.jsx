@@ -37,13 +37,27 @@ const SignInPage = () => {
         localStorage.setItem("token", data.token);
         localStorage.setItem("identity", data.user.identity);
         localStorage.setItem("userId", data.user.id);
+
         setToken(data.token);
         setIdentity(data.user.identity);
 
         toast.success(isSignUp ? "Account created! 🚀" : "Welcome back! ✨");
-        navigate(data.user.identity === "brand" ? "/influlist" : "/brandlist");
-      } else {
-        toast.error(data.message);
+
+        if (isSignUp) {
+          // 👉 After registration
+          navigate(
+            data.user.identity === "brand"
+              ? "/brand-profile-setup"
+              : "/influ-profile-setup"
+          );
+        } else {
+          // 👉 After login (your existing logic)
+          navigate(
+            data.user.identity === "brand"
+              ? "/influlist"
+              : "/brandlist"
+          );
+        }
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Something went wrong");
@@ -57,23 +71,20 @@ const SignInPage = () => {
         {/* Toggle */}
         <div className="relative flex bg-gray-100 rounded-xl p-1 mb-8">
           <div
-            className={`absolute top-1 bottom-1 w-[48%] bg-blue-600 rounded-xl transition-all duration-300 ${
-              currentState === "Login" ? "left-1" : "left-[51%]"
-            }`}
+            className={`absolute top-1 bottom-1 w-[48%] bg-blue-600 rounded-xl transition-all duration-300 ${currentState === "Login" ? "left-1" : "left-[51%]"
+              }`}
           />
           <button
             onClick={() => setCurrentState("Login")}
-            className={`relative z-10 w-1/2 py-2 text-sm font-semibold transition-colors ${
-              currentState === "Login" ? "text-white" : "text-gray-500"
-            }`}
+            className={`relative z-10 w-1/2 py-2 text-sm font-semibold transition-colors ${currentState === "Login" ? "text-white" : "text-gray-500"
+              }`}
           >
             Login
           </button>
           <button
             onClick={() => setCurrentState("Sign Up")}
-            className={`relative z-10 w-1/2 py-2 text-sm font-semibold transition-colors ${
-              currentState === "Sign Up" ? "text-white" : "text-gray-500"
-            }`}
+            className={`relative z-10 w-1/2 py-2 text-sm font-semibold transition-colors ${currentState === "Sign Up" ? "text-white" : "text-gray-500"
+              }`}
           >
             Register
           </button>
@@ -147,11 +158,10 @@ const SignInPage = () => {
           {currentState === "Sign Up" && (
             <div className="grid grid-cols-2 gap-3">
               <label
-                className={`cursor-pointer border-2 rounded-xl p-4 text-center transition-all flex flex-col items-center gap-2 ${
-                  formData.identity === "brand"
+                className={`cursor-pointer border-2 rounded-xl p-4 text-center transition-all flex flex-col items-center gap-2 ${formData.identity === "brand"
                     ? "border-blue-600 bg-blue-50"
                     : "border-gray-200"
-                }`}
+                  }`}
               >
                 <Briefcase size={20} />
                 <input
@@ -166,11 +176,10 @@ const SignInPage = () => {
               </label>
 
               <label
-                className={`cursor-pointer border-2 rounded-xl p-4 text-center transition-all flex flex-col items-center gap-2 ${
-                  formData.identity === "creator"
+                className={`cursor-pointer border-2 rounded-xl p-4 text-center transition-all flex flex-col items-center gap-2 ${formData.identity === "creator"
                     ? "border-blue-600 bg-blue-50"
                     : "border-gray-200"
-                }`}
+                  }`}
               >
                 <User2 size={20} />
                 <input
