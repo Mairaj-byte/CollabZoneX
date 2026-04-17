@@ -10,6 +10,7 @@ import paymentRouter from "./routes/paymentRoute.js";
 import campaignRouter from "./routes/campaignRoute.js";
 import collaborationRouter from "./routes/collaborationRoute.js";
 import creatorRouter from "./routes/creatorRoute.js";
+import { resetPassword, sendResetOtp } from './controllers/PasswordReset.js'
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -31,7 +32,8 @@ app.use("/api/campaign", campaignRouter);
 app.use("/api/collaboration", collaborationRouter);
 app.use("/api/payment", paymentRouter);
 
-
+app.post('/api/send-reset-otp', sendResetOtp);
+app.post('/api/reset-password', resetPassword);
 
 app.get("/", (req, res) => {
   res.send("API Working");
