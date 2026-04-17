@@ -36,14 +36,18 @@ const InfluencerListing = () => {
     <div className="min-h-screen bg-[#f8fafc] px-6 py-20 mt-15">
       <div className="max-w-[1600px] mx-auto">
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div>
             <h1 className="text-4xl font-bold text-slate-900 tracking-tight">
               Featured <span className="text-blue-600">Creators</span>
             </h1>
-            <p className="text-slate-500 mt-2 text-lg">
-              Collaborate with the world's most engaging influencers.
-            </p>
+
+            <div className="overflow-hidden whitespace-nowrap w-full">
+              <p className="inline-block animate-marquee text-slate-500 mt-2 text-lg">
+                Collaborate with the world's most engaging influencers.
+              </p>
+            </div>
+
           </div>
           <div className="bg-white px-4 py-2 rounded-full shadow-sm border text-sm font-medium text-slate-600">
             {creators.length} Creators Available

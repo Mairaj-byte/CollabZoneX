@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
+import axios from "axios";
 
 const StatCard = ({ title, value }) => (
   <div className="bg-white rounded-xl shadow-sm p-4 hover:shadow-md transition">
@@ -26,23 +27,25 @@ const InfluencerDash = () => {
   const [campaigns, setCampaigns] = useState([]);
   const [loading, setLoading] = useState(true);
 
+
+  const fetchCampaigns = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:4000/api/campaign/creator/${userId}`
+      );
+
+      const data = await res.json();
+
+      setCampaigns(data);
+
+    } catch (error) {
+      console.error("Error fetching campaigns:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchCampaigns = async () => {
-      try {
-        const res = await fetch(
-          `http://localhost:4000/api/campaign/creator/${userId}`
-        );
-
-        const data = await res.json();
-
-        setCampaigns(data); // API returns array directly
-      } catch (error) {
-        console.error("Error fetching campaigns:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     if (userId) fetchCampaigns();
   }, [userId]);
 
@@ -50,6 +53,20 @@ const InfluencerDash = () => {
     (sum, c) => sum + (c.totalBudget || 0),
     0
   );
+
+
+  const handleAccept = async (campaignId) => {
+    try {
+      await axios.put(`http://localhost:4000/api/campaign/status/${campaignId}`, {
+        status: "accepted",
+      });
+
+      fetchCampaigns(); // refresh dashboard
+
+    } catch (error) {
+      console.error(error.response?.data?.message);
+    }
+  };
 
   return (
     <div className="min-h-screen px-4 sm:px-6 py-6 mt-22">
@@ -196,7 +213,7 @@ const InfluencerDash = () => {
                       onClick={() => openChat(campaign._id)}
                       className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
                     >
-                      Chat Enabled
+                      Chat Enabled Yippi
                     </button>
                   )}
 

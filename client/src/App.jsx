@@ -1,170 +1,115 @@
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 
+// Pages
 import LandingPage from "./pages/LandingPage";
-import AdminDash from "./pages/AdminDash";
+import SignInPage from "./pages/SignInPage";
+
 import BrandDash from "./pages/BrandDash";
 import InfluencerDash from "./pages/InfluencerDash";
-import SignInPage from "./pages/SignInPage";
+
 import BrandListing from "./pages/BrandListing";
 import InfluencerListing from "./pages/InfluencerListing";
+
 import InProfileDetail from "./pages/InProfileDetail";
-import BrandProfileSetup from "./pages/BrandProfileSetup";
-
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import BrandDetail from "./pages/BrandDetail";
+
+import BrandProfileSetup from "./pages/BrandProfileSetup";
 import InfluProfileSetup from "./pages/InfluProfileSetup";
+
+import CreateCampaign from "./pages/CreateCampaign";
+
 import { AboutUs } from "./pages/AboutUs";
 import { Pricing } from "./pages/Pricing";
 import { LegalPage } from "./pages/LegalPage";
-import Checkout from "./pages/Checkout";
-import MyPage from "./pages/mypage";
-import CreateCampaign from "./pages/CreateCampaign";
+
+// Components
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import ProtectedRoute from "./pages/ProtectedRoute";
 
+// Toast
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
-
   const location = useLocation();
 
-  // Routes where Navbar & Footer should be hidden
+  // Hide Navbar & Footer on specific routes
   const hideLayoutRoutes = ["/signinpage"];
-
   const hideLayout = hideLayoutRoutes.includes(location.pathname);
 
   return (
-    <>
-      <div className="max-w-7xl mx-auto px-4">
+    <div className="max-w-7xl mx-auto px-4">
+      
+      {/* Navbar */}
+      {!hideLayout && <Navbar />}
 
-        {!hideLayout && <Navbar />}
+      {/* Routes */}
+      <Routes>
 
+        {/* Public Routes */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/landing" element={<LandingPage />} />
+        <Route path="/signinpage" element={<SignInPage />} />
 
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/landing" element={<LandingPage />} />
+        {/* Dashboard Routes */}
+        <Route path="/branddash" element={<BrandDash />} />
+        <Route path="/influencerdash" element={<InfluencerDash />} />
 
-          <Route path="/admindash" element={<AdminDash />} />
-          <Route path="/branddash" element={<BrandDash />} />
-          <Route path="/influencerdash" element={<InfluencerDash />} />
+        {/* Protected Routes */}
+        <Route
+          path="/brandlist"
+          element={
+            <ProtectedRoute>
+              <BrandListing />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/influlist"
+          element={
+            <ProtectedRoute>
+              <InfluencerListing />
+            </ProtectedRoute>
+          }
+        />
 
+        {/* Profile & Details */}
+        <Route path="/profile/:id" element={<InProfileDetail />} />
+        <Route path="/brand/:id" element={<BrandDetail />} />
 
+        {/* Setup Pages */}
+        <Route path="/brand-profile-setup" element={<BrandProfileSetup />} />
+        <Route path="/influ-profile-setup" element={<InfluProfileSetup />} />
 
-          <Route path="/signinpage" element={<SignInPage />} />
+        {/* Static Pages */}
+        <Route path="/aboutus" element={<AboutUs />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/legalpage" element={<LegalPage />} />
 
-          {/* <Route path="/brandlist" element={<BrandListing />} />
-          <Route path="/influlist" element={<InfluencerListing />} /> */}
+        {/* Campaign */}
+        <Route path="/createcampaign/:id" element={<CreateCampaign />} />
 
-          <Route
-            path="/brandlist"
-            element={
-              <ProtectedRoute>
-                <BrandListing />
-              </ProtectedRoute>
-            }
-          />
+      </Routes>
 
-          <Route
-            path="/influlist"
-            element={
-              <ProtectedRoute>
-                <InfluencerListing />
-              </ProtectedRoute>
-            }
-          />
+      {/* Footer */}
+      {!hideLayout && <Footer />}
 
-          <Route path="/profile/:id" element={<InProfileDetail />} />
-          <Route path="/brand/:id" element={<BrandDetail />} />
-
-          <Route path="/influ-profile-setup" element={<InfluProfileSetup />} />
-          <Route path="/brand-profile-setup" element={<BrandProfileSetup />} />
-
-          <Route path="/aboutus" element={<AboutUs />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/legalpage" element={<LegalPage />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/createcampaign/:id" element={<CreateCampaign />} />
-
-
-
-
-
-
-        </Routes>
-
-        {!hideLayout && <Footer />}
-
-        <ToastContainer position="top-right" autoClose={2000} hideProgressBar={false} newestOnTop closeOnClick />
-
-
-      </div>
-
-
-    </>
+      <ToastContainer
+  position="top-right"
+  autoClose={2500}
+  hideProgressBar={true}
+  newestOnTop
+  closeOnClick
+  pauseOnHover
+  draggable
+  theme="dark"
+  toastClassName="custom-toast"
+  bodyClassName="custom-toast-body"
+/>
+    </div>
   );
 };
 
 export default App;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
