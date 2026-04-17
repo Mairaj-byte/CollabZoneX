@@ -41,7 +41,7 @@ const App = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4">
-      
+
       {/* Navbar */}
       {!hideLayout && <Navbar />}
 
@@ -97,17 +97,17 @@ const App = () => {
       {!hideLayout && <Footer />}
 
       <ToastContainer
-  position="top-right"
-  autoClose={2500}
-  hideProgressBar={true}
-  newestOnTop
-  closeOnClick
-  pauseOnHover
-  draggable
-  theme="dark"
-  toastClassName="custom-toast"
-  bodyClassName="custom-toast-body"
-/>
+        position="bottom-right"
+        autoClose={2500}
+        hideProgressBar={true}
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="dark"
+        toastClassName="custom-toast"
+        bodyClassName="custom-toast-body"
+      />
     </div>
   );
 };
