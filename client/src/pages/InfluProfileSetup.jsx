@@ -101,7 +101,7 @@ const InfluProfileSetup = () => {
         }
       );
 
-      toast.success("Profile saved successfully 🎉");
+      toast.success("Profile saved successfully !!");
       setTimeout(() => navigate("/influencerdash"), 1200);
     } catch (err) {
       toast.error("Profile save failed ❌");
@@ -112,7 +112,17 @@ const InfluProfileSetup = () => {
 
     <div className="min-h-screen bg-blue-50 flex items-center justify-center p-6 mt-21">
     
-      <ToastContainer />
+      <ToastContainer 
+      position="bottom-right"
+        autoClose={2500}
+        hideProgressBar={true}
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="dark"
+        toastClassName="custom-toast"
+        bodyClassName="custom-toast-body"/>
 
       <div className="w-full max-w-md bg-white rounded-lg shadow-2xl overflow-hidden border border-gray-100">
         {/* Header Accent */}
