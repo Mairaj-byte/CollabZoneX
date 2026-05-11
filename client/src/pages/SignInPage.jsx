@@ -39,7 +39,7 @@ const SignInPage = ({ setReset }) => {
     }
   };
 
-  // Logic for Resetting Password
+  
   const handleResetPassword = async (e) => {
     e.preventDefault();
     try {
@@ -61,7 +61,7 @@ const SignInPage = ({ setReset }) => {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     
-    // Handle Forgot Password submission separately
+    
     if (currentState === "Forgot Password") {
       if (!otpSent) {
         handleSendOtp();
@@ -71,7 +71,7 @@ const SignInPage = ({ setReset }) => {
       return;
     }
 
-    // Existing Login/SignUp Logic
+    
     try {
       const isSignUp = currentState === "Sign Up";
       const url = `http://localhost:4000/api/user/${isSignUp ? "register" : "login"}`;
@@ -105,7 +105,6 @@ const SignInPage = ({ setReset }) => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-white to-purple-100 p-4">
       <div className="bg-white/80 backdrop-blur-xl p-8 rounded-2xl shadow-2xl w-full max-w-md border border-gray-200 transition-all duration-500">
 
-        {/* Toggle (Hidden when in Forgot Password mode) */}
         {currentState !== "Forgot Password" && (
           <div className="relative flex bg-gray-100 rounded-xl p-1 mb-8">
             <div className={`absolute top-1 bottom-1 w-[48%] bg-blue-600 rounded-xl transition-all duration-300 ${currentState === "Login" ? "left-1" : "left-[51%]"}`} />
@@ -114,7 +113,7 @@ const SignInPage = ({ setReset }) => {
           </div>
         )}
 
-        {/* Heading */}
+        
         <div className="text-center mb-6">
           <h2 className="text-3xl font-bold text-gray-900">
             {currentState === "Login" && "Welcome Back!"}
@@ -137,13 +136,13 @@ const SignInPage = ({ setReset }) => {
             </div>
           )}
 
-          {/* Email Field (Always visible) */}
+         
           <div className="relative">
             <Mail className="absolute left-3 top-3.5 text-gray-400" size={18} />
             <input name="email" type="email" placeholder="Email Address" className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none" value={formData.email} onChange={handleInputChange} required />
           </div>
 
-          {/* Login/Sign Up Password */}
+          
           {currentState !== "Forgot Password" && (
             <div className="relative">
               <Lock className="absolute left-3 top-3.5 text-gray-400" size={18} />
@@ -154,7 +153,7 @@ const SignInPage = ({ setReset }) => {
             </div>
           )}
 
-          {/* Forgot Password Specific Fields */}
+          
           {currentState === "Forgot Password" && otpSent && (
             <>
               <div className="relative">
@@ -168,7 +167,7 @@ const SignInPage = ({ setReset }) => {
             </>
           )}
 
-          {/* Identity (Sign Up Only) */}
+          
           {currentState === "Sign Up" && (
             <div className="grid grid-cols-2 gap-3">
               <label
