@@ -2,82 +2,136 @@ import bcrypt from 'bcryptjs';
 import userModel from '../models/userModel.js';
 import transporter from '../config/nodeMailer.js';
 
+// ================= SEND RESET OTP =================
 export const sendResetOtp = async (req, res) => {
     const { email } = req.body;
+
     if (!email) {
-        return res.json({ success: false, message: 'Email is required' });
+        return res.status(400).json({
+            success: false,
+            message: 'Email is required'
+        });
     }
+
     try {
-        // Check if email exists in userModel
-        let user = await userModel.findOne({ email });
-        
-        
-        // If still not found, return error
+        // Check if user exists
+        const user = await userModel.findOne({ email });
+
         if (!user) {
-            return res.json({ success: false, message: 'User not found' });
+            return res.status(404).json({
+                success: false,
+                message: 'User not found'
+            });
         }
 
+        // Generate OTP
         const otp = String(Math.floor(100000 + Math.random() * 900000));
+
+        // Save OTP + expiry
         user.resetOtp = otp;
-        user.resetOtpExpiryAt = Date.now() + 15 * 60 * 1000; // OTP valid for 15 minutes
+        user.resetOtpExpiryAt = Date.now() + 15 * 60 * 1000;
+
         await user.save();
 
-        const userName = user.name || ''; // adjust field as needed
-        const mailOption = {
+        // Send email
+        await transporter.sendMail({
             from: process.env.SENDER_EMAIL,
             to: user.email,
-            subject: 'Password reset OTP',
-            text: `Hi ${userName},\n\nYour password reset OTP is: ${otp}\n\nThis OTP is valid for 15 minutes.\n\nBest regards,\nCollabZoneX Team`
-        };
-        await transporter.sendMail(mailOption);
-        return res.json({ success: true, message: 'OTP sent to your email' });
+            subject: 'Password Reset OTP',
+            text: `Hi ${user.name || ''},
+
+Your password reset OTP is: ${otp}
+
+This OTP is valid for 15 minutes.
+
+Best regards,  
+CollabZoneX Team`
+        });
+
+        return res.json({
+            success: true,
+            message: 'OTP sent to your email'
+        });
+
     } catch (error) {
-        return res.json({ success: false, message: error.message });
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
     }
 };
 
-// Reset Password
+
+// ================= RESET PASSWORD =================
 export const resetPassword = async (req, res) => {
     const { email, otp, newPassword } = req.body;
+
     if (!email || !otp || !newPassword) {
-        return res.json({ success: false, message: 'Email, OTP, and new password are required' });
+        return res.status(400).json({
+            success: false,
+            message: 'Email, OTP, and new password are required'
+        });
     }
+
     try {
-        // Check if email exists in userModel
-        let user = await userModel.findOne({ email });
-        
-        
-        // If still not found, return error
+        // Find user
+        const user = await userModel.findOne({ email });
+
         if (!user) {
-            return res.json({ success: false, message: 'User not found' });
+            return res.status(404).json({
+                success: false,
+                message: 'User not found'
+            });
         }
 
-        if (user.resetOtp === "" || user.resetOtp !== otp) {
-            return res.json({ success: false, message: 'Invalid OTP' });
+        // Validate OTP
+        if (!user.resetOtp || user.resetOtp !== otp) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid OTP'
+            });
         }
 
         if (user.resetOtpExpiryAt < Date.now()) {
-            return res.json({ success: false, message: 'OTP Expired' });
+            return res.status(400).json({
+                success: false,
+                message: 'OTP Expired'
+            });
         }
 
-        const hashedPassword = await bcrypt.hash(newPassword, 8);
+        // Hash new password
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
 
+        // Update user
         user.password = hashedPassword;
         user.resetOtp = '';
         user.resetOtpExpiryAt = 0;
+
         await user.save();
 
-        const userName = user.name || '';
-        const mailOptions = {
+        // Send confirmation email
+        await transporter.sendMail({
             from: process.env.SENDER_EMAIL,
             to: email,
-            subject: 'Password reset successfully',
-            text: `Hi ${userName},\n\nYour password has been reset successfully for Email id: ${email}\n\nBest regards,\nCollabZoneX Team`
-        };
-        await transporter.sendMail(mailOptions);
+            subject: 'Password Reset Successful',
+            text: `Hi ${user.name || ''},
 
-        return res.json({ success: true, message: 'Password reset successfully' });
+Your password has been reset successfully for email: ${email}
+
+Best regards,  
+CollabZoneX Team`
+        });
+
+        return res.json({
+            success: true,
+            message: 'Password reset successfully'
+        });
+
     } catch (error) {
-        res.json({ success: false, message: 'Error resetting password', error: error.message });
+        return res.status(500).json({
+            success: false,
+            message: 'Error resetting password',
+            error: error.message
+        });
     }
 };
