@@ -6,11 +6,9 @@ import { ShopContext } from "../context/ShopContext";
 import { Mail, Lock, User, Eye, EyeOff, Briefcase, User2, KeyRound, ArrowLeft } from "lucide-react";
 
 const SignInPage = () => {
-  // States: "Login", "Sign Up", "Forgot Password"
   const [currentState, setCurrentState] = useState("Login");
   const [showPassword, setShowPassword] = useState(false);
-  const [otpSent, setOtpSent] = useState(false); // To toggle between Send OTP and Reset UI
-  
+  const [otpSent, setOtpSent] = useState(false); 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -40,7 +38,7 @@ const SignInPage = () => {
     }
   };
 
-  // Logic for Resetting Password
+  
   const handleResetPassword = async (e) => {
     e.preventDefault();
     try {
@@ -62,7 +60,7 @@ const SignInPage = () => {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     
-    // Handle Forgot Password submission separately
+    
     if (currentState === "Forgot Password") {
       if (!otpSent) {
         handleSendOtp();
@@ -72,7 +70,7 @@ const SignInPage = () => {
       return;
     }
 
-    // Existing Login/SignUp Logic
+    
     try {
       const isSignUp = currentState === "Sign Up";
       const url = `http://localhost:4000/api/user/${isSignUp ? "register" : "login"}`;
@@ -106,7 +104,6 @@ const SignInPage = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-white to-purple-100 p-4">
       <div className="bg-white/80 backdrop-blur-xl p-8 rounded-2xl shadow-2xl w-full max-w-md border border-gray-200 transition-all duration-500">
 
-        {/* Toggle (Hidden when in Forgot Password mode) */}
         {currentState !== "Forgot Password" && (
           <div className="relative flex bg-gray-100 rounded-xl p-1 mb-8">
             <div className={`absolute top-1 bottom-1 w-[48%] bg-blue-600 rounded-xl transition-all duration-300 ${currentState === "Login" ? "left-1" : "left-[51%]"}`} />
@@ -115,7 +112,7 @@ const SignInPage = () => {
           </div>
         )}
 
-        {/* Heading */}
+        
         <div className="text-center mb-6">
           <h2 className="text-3xl font-bold text-gray-900">
             {currentState === "Login" && "Welcome Back!"}
@@ -138,13 +135,13 @@ const SignInPage = () => {
             </div>
           )}
 
-          {/* Email Field (Always visible) */}
+         
           <div className="relative">
             <Mail className="absolute left-3 top-3.5 text-gray-400" size={18} />
             <input name="email" type="email" placeholder="Email Address" className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none" value={formData.email} onChange={handleInputChange} required />
           </div>
 
-          {/* Login/Sign Up Password */}
+          
           {currentState !== "Forgot Password" && (
             <div className="relative">
               <Lock className="absolute left-3 top-3.5 text-gray-400" size={18} />
@@ -155,7 +152,7 @@ const SignInPage = () => {
             </div>
           )}
 
-          {/* Forgot Password Specific Fields */}
+          
           {currentState === "Forgot Password" && otpSent && (
             <>
               <div className="relative">
@@ -169,7 +166,7 @@ const SignInPage = () => {
             </>
           )}
 
-          {/* Identity (Sign Up Only) */}
+          
           {currentState === "Sign Up" && (
             <div className="grid grid-cols-2 gap-3">
               <label className={`cursor-pointer border-2 rounded-xl p-4 text-center transition-all flex flex-col items-center gap-2 ${formData.identity === "brand" ? "border-blue-600 bg-blue-50" : "border-gray-200"}`}>
@@ -185,7 +182,7 @@ const SignInPage = () => {
             </div>
           )}
 
-          {/* Footer Actions */}
+          
           <div className="flex justify-between items-center">
             {currentState === "Login" ? (
               <span onClick={() => {setCurrentState("Forgot Password"); setOtpSent(false)}} className="text-xs text-gray-400 hover:text-blue-600 cursor-pointer transition-colors">
