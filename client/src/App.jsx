@@ -17,6 +17,8 @@ import BrandDetail from "./pages/BrandDetail";
 import BrandProfileSetup from "./pages/BrandProfileSetup";
 import InfluProfileSetup from "./pages/InfluProfileSetup";
 
+import AccountSetting from "./pages/AccountSetting"
+
 import CreateCampaign from "./pages/CreateCampaign";
 
 import { AboutUs } from "./pages/AboutUs";
@@ -85,6 +87,8 @@ const App = () => {
         {/* Setup Pages */}
         <Route path="/brand-profile-setup" element={<BrandProfileSetup />} />
         <Route path="/influ-profile-setup" element={<InfluProfileSetup />} />
+
+        <Route path="/account_setting" element={<AccountSetting/>}/>
 
         {/* Static Pages */}
         <Route path="/aboutus" element={<AboutUs />} />

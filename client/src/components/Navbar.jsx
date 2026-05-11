@@ -102,7 +102,7 @@ const Navbar = () => {
               </a>
               <a
                 className="flex px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
-                onClick={() => navigate('#')}
+                onClick={() => navigate('/account_setting')}
               ><img alt="Settings" className='w-5 h-5 mr-2' />
                 Account Settings
               </a>
