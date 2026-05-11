@@ -1,7 +1,6 @@
 import bcrypt from 'bcryptjs';
-import models from '../models/userModel.js';
+import userModel from '../models/userModel.js';
 import transporter from '../config/nodeMailer.js';
-const { userModel } = models;
 
 export const sendResetOtp = async (req, res) => {
     const { email } = req.body;
@@ -56,6 +55,7 @@ export const resetPassword = async (req, res) => {
         if (user.resetOtp === "" || user.resetOtp !== otp) {
             return res.json({ success: false, message: 'Invalid OTP' });
         }
+
         if (user.resetOtpExpiryAt < Date.now()) {
             return res.json({ success: false, message: 'OTP Expired' });
         }

@@ -4,10 +4,12 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import { Mail, Lock, User, Eye, EyeOff, Briefcase, User2 } from "lucide-react";
+import ResetPassword from "../components/ResetPassword";
 
-const SignInPage = () => {
+const SignInPage = ({ setReset }) => {
   const [currentState, setCurrentState] = useState("Login");
   const [showPassword, setShowPassword] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -159,8 +161,8 @@ const SignInPage = () => {
             <div className="grid grid-cols-2 gap-3">
               <label
                 className={`cursor-pointer border-2 rounded-xl p-4 text-center transition-all flex flex-col items-center gap-2 ${formData.identity === "brand"
-                    ? "border-blue-600 bg-blue-50"
-                    : "border-gray-200"
+                  ? "border-blue-600 bg-blue-50"
+                  : "border-gray-200"
                   }`}
               >
                 <Briefcase size={20} />
@@ -177,8 +179,8 @@ const SignInPage = () => {
 
               <label
                 className={`cursor-pointer border-2 rounded-xl p-4 text-center transition-all flex flex-col items-center gap-2 ${formData.identity === "creator"
-                    ? "border-blue-600 bg-blue-50"
-                    : "border-gray-200"
+                  ? "border-blue-600 bg-blue-50"
+                  : "border-gray-200"
                   }`}
               >
                 <User2 size={20} />
@@ -195,9 +197,13 @@ const SignInPage = () => {
           )}
 
           <div className="flex justify-end">
-            <span className="text-xs text-gray-400 hover:text-blue-600 cursor-pointer transition-colors">
-              Forgot Password?
-            </span>
+            <button
+              type="button"
+              className="cursor-pointer text-blue-600 hover:underline ml-1 self-start"
+              onClick={() => setShowResetModal(true)}
+            >
+              Forget Password
+            </button>
           </div>
 
           {/* Button */}
@@ -209,6 +215,7 @@ const SignInPage = () => {
           </button>
         </form>
       </div>
+      {showResetModal && <ResetPassword setReset={setShowResetModal} />}
     </div>
   );
 };

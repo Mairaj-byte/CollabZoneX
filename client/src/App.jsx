@@ -25,12 +25,14 @@ import { LegalPage } from "./pages/LegalPage";
 
 // Components
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 import ProtectedRoute from "./pages/ProtectedRoute";
 
 // Toast
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+
+import ResetPassword from "./components/ResetPassword";
 
 const App = () => {
   const location = useLocation();
@@ -40,11 +42,10 @@ const App = () => {
   const hideLayout = hideLayoutRoutes.includes(location.pathname);
 
   return (
-    <div className="max-w-7xl mx-auto px-4">
+    <div className="flex flex-col h-screen overflow-hidden">
       
       {/* Navbar */}
       {!hideLayout && <Navbar />}
-
       {/* Routes */}
       <Routes>
 
@@ -79,6 +80,8 @@ const App = () => {
         <Route path="/profile/:id" element={<InProfileDetail />} />
         <Route path="/brand/:id" element={<BrandDetail />} />
 
+        <Route path='/reset_password' element={<ResetPassword />}/>
+
         {/* Setup Pages */}
         <Route path="/brand-profile-setup" element={<BrandProfileSetup />} />
         <Route path="/influ-profile-setup" element={<InfluProfileSetup />} />
@@ -93,8 +96,6 @@ const App = () => {
 
       </Routes>
 
-      {/* Footer */}
-      {!hideLayout && <Footer />}
 
       <ToastContainer
   position="top-right"
