@@ -61,7 +61,7 @@ const InfluencerDash = () => {
         status: "accepted",
       });
 
-      fetchCampaigns(); // refresh dashboard
+      fetchCampaigns(); 
 
     } catch (error) {
       console.error(error.response?.data?.message);
@@ -115,7 +115,7 @@ const InfluencerDash = () => {
           )}
         </div>
 
-        {/* Profile Status */}
+        
         <div className="bg-white rounded-xl shadow-sm p-4">
           <h2 className="text-lg font-semibold text-gray-800 mb-3">
             Profile Status
@@ -141,7 +141,7 @@ const InfluencerDash = () => {
         </div>
       </div>
 
-      {/* Campaign Cards */}
+      
       <div className="mt-10">
         <h2 className="text-2xl font-bold mb-6">Your Campaigns</h2>
 
