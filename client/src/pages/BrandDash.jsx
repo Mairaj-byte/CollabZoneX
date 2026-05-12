@@ -333,17 +333,17 @@ const BrandDash = () => {
             </div>
             <aside className='shrink-0'>
               <div className=' bg-white border border-gray-400 flex flex-col w-60 px-0 py-0 mt-0 mb-0 overflow-y-clip sticky'>
-                <div className='flex flex-col gap-2 px-2 py-4 border border-gray-300  bg-gray-50 rounded m-2'>
+                <div className='flex flex-col gap-2 px-2 py-5 border border-gray-300  bg-gray-50 rounded m-2'>
                   <h1 className='text-xl font-bold'>Quick Stats</h1>
-                  <label htmlFor="">Active Request:</label><hr className='border-b bg-gray-100' />
-                  <label htmlFor="">Panding Approvals:</label> <hr className='border-b bg-gray-100' />
-                  <label htmlFor="">Earning this Month:</label><hr className='border-b bg-gray-100' />
+                  <label htmlFor="">Active Request:</label><hr className='border-b-gray-50 bg-gray-100' />
+                  <label htmlFor="">Panding Approvals:</label> <hr className='border-b-red-50 bg-gray-100' />
+                  <label htmlFor="">Earning this Month:</label><hr className='border-b-red-50 bg-gray-100' />
                 </div>
-                <div className='flex flex-col gap-2 px-2 py-4 border border-gray-300 bg-gray-50 rounded m-2'>
+                <div className='flex flex-col gap-2 px-2 py-5 border border-gray-300 bg-gray-50 rounded m-2'>
                   <h1 className='text-xl font-bold'>Quick Stats</h1>
-                  <label htmlFor="">Active Request:</label><hr className='border-b bg-gray-100' />
-                  <label htmlFor="">Panding Approval:s:</label> <hr className='border-b bg-gray-100' />
-                  <label htmlFor="">Earning this Month:</label><hr className='border-b bg-gray-100' />
+                  <label htmlFor="">Active Request:</label><hr className='border-b-red-50 bg-gray-100' />
+                  <label htmlFor="">Panding Approval:s:</label> <hr className='border-b-red-50 bg-gray-100' />
+                  <label htmlFor="">Earning this Month:</label><hr className='border-b-red-50 bg-gray-100' />
                 </div>
               </div>
             </aside>

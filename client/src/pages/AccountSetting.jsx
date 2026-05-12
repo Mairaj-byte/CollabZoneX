@@ -2,53 +2,59 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShopContext } from '../context/ShopContext';
 import { User, Lock, CreditCard, Bell, Briefcase, Camera, LogOut, Mail, X } from 'lucide-react';
+// import ResetPassword from "../components/ResetPassword"; // Keep if you use it
 
 const AccountSetting = () => {
   const navigate = useNavigate();
-  // Using your exact context
   const { token, identity, logout } = useContext(ShopContext);
 
-  // Active Tab State - Set to 'profile' by default to avoid the welcome message
   const [activeTab, setActiveTab] = useState('profile');
   
   // Modal states
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
 
   // 🔹 Combined Form State (Handles both Brand and Creator fields)
   const [formData, setFormData] = useState({
-    // Common / Creator fields
-    name: 'Mohd Zahid',
-    email: 'zahid@collabzonex.com',
-    primaryPlatform: 'YouTube',
-    followerCount: '',
-    // Brand fields from your code
+    // Common fields
+    name: '',
+    email: '',
+    
+    // Brand specific fields
     brandName: '',
     industry: '',
     website: '',
     budgetRange: '',
+    
+    // Creator specific fields (Merged from InfluProfileSetup)
+    username: '',
+    bio: '',
+    niche: '',
+    location: '',
+    instagram: '',
+    youtube: '',
+    followersCount: '',
+    engagementRate: '',
+    pricePerPost: ''
   });
 
   // API states
-  const [logo, setLogo] = useState(null);
+  const [profileImage, setProfileImage] = useState(null); // Used for both Brand Logo & Creator Profile Pic
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  // 🔹 Fetch existing profile (Runs on mount & when identity/token changes)
+  // 🔹 Fetch existing profile
   useEffect(() => {
     const fetchProfile = async () => {
-      // If no token, wait or redirect based on your app's flow
       if (!token) return;
 
       try {
         if (identity === "brand") {
           const res = await fetch("http://localhost:4000/api/brand/me", {
-            headers: {
-              Authorization: `Bearer ${token}`, // Using context token
-            },
+            headers: { Authorization: `Bearer ${token}` },
           });
-
           const data = await res.json();
 
           if (data.success) {
@@ -59,32 +65,54 @@ const AccountSetting = () => {
               website: data.data.website || "",
               budgetRange: data.data.budgetRange || "",
             }));
-
-            if (data.data.logo) {
-              setPreview(data.data.logo);
-            }
+            if (data.data.logo) setPreview(data.data.logo);
           }
         } else {
-          // Future creator API fetch can go here
+          // 🔹 Creator Profile Fetch (Merged from InfluProfileSetup)
+          const res = await fetch("http://localhost:4000/api/creator/me", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          
+          // Using fetch instead of axios, so we extract JSON first
+          const data = await res.json();
+          // Handle API response structure (either wrapped in data or direct)
+          const creatorData = data.data || data; 
+
+          if (creatorData) {
+            setFormData(prev => ({
+              ...prev,
+              username: creatorData.username || "",
+              bio: creatorData.bio || "",
+              niche: creatorData.niche || "",
+              location: creatorData.location || "",
+              instagram: creatorData.socialLinks?.instagram || creatorData.instagram || "",
+              youtube: creatorData.socialLinks?.youtube || creatorData.youtube || "",
+              followersCount: creatorData.followersCount || "",
+              engagementRate: creatorData.engagementRate || "",
+              pricePerPost: creatorData.pricePerPost || ""
+            }));
+
+            if (creatorData.profileImage) {
+              setPreview(creatorData.profileImage);
+            }
+          }
         }
       } catch (error) {
-        console.error(error);
+        console.error("Error fetching profile:", error);
       }
     };
 
     fetchProfile();
   }, [token, identity]);
 
-  // 🔹 Handle input change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // 🔹 Handle logo upload
-  const handleLogoChange = (e) => {
+  const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setLogo(file);
+      setProfileImage(file);
       setPreview(URL.createObjectURL(file));
     }
   };
@@ -102,33 +130,55 @@ const AccountSetting = () => {
         form.append("industry", formData.industry);
         form.append("website", formData.website);
         form.append("budgetRange", formData.budgetRange);
-        if (logo) form.append("logo", logo);
+        if (profileImage) form.append("logo", profileImage);
 
         const res = await fetch("http://localhost:4000/api/brand", {
           method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`, // Using context token
-          },
+          headers: { Authorization: `Bearer ${token}` },
           body: form,
         });
 
         const data = await res.json();
-
-        if (data.success) {
-          setMessage(data.message || "Profile updated successfully.");
+        if (res.ok && data.success !== false) {
+          setMessage(data.message || "Brand profile updated successfully.");
         } else {
-          setMessage(data.message || "Something went wrong");
+          setMessage("Something went wrong updating brand.");
         }
+
       } else {
-        // Mock Creator Submission
-        setTimeout(() => setMessage("Creator profile updated successfully."), 1000);
+        // 🔹 Creator Profile Submit (Merged from InfluProfileSetup)
+        const form = new FormData();
+        form.append("username", formData.username);
+        form.append("bio", formData.bio);
+        form.append("niche", formData.niche);
+        form.append("location", formData.location);
+        form.append("instagram", formData.instagram);
+        form.append("youtube", formData.youtube);
+        form.append("followersCount", Number(formData.followersCount));
+        form.append("engagementRate", Number(formData.engagementRate));
+        form.append("pricePerPost", Number(formData.pricePerPost));
+        
+        if (profileImage) {
+          form.append("profileImage", profileImage);
+        }
+
+        const res = await fetch("http://localhost:4000/api/creator", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+          body: form,
+        });
+
+        if (res.ok) {
+          setMessage("Creator profile saved successfully!");
+        } else {
+          setMessage("Profile save failed.");
+        }
       }
     } catch (error) {
       console.error(error);
-      setMessage("Server error");
+      setMessage("Server error occurred.");
     } finally {
       setLoading(false);
-      // Clear success message after 4 seconds
       setTimeout(() => setMessage(""), 4000);
     }
   };
@@ -143,32 +193,30 @@ const AccountSetting = () => {
     switch (activeTab) {
       case 'profile':
         return (
-          <div className="animate-fadeIn">
+          <div className="animate-fadeIn overflow-y-scroll">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">
-              {identity === 'brand' ? 'Brand Profile Setup' : 'Creator Profile Information'}
+              {identity === 'brand' ? 'Brand Profile Setup' : 'Creator Profile Setup'}
             </h2>
             
             {message && (
-              <div className={`mb-6 p-3 rounded-lg text-center font-medium ${message === 'Server error' || message === 'Something went wrong' ? 'bg-red-50 text-red-600 border border-red-200' : 'bg-green-50 text-green-600 border border-green-200'}`}>
+              <div className={`mb-6 p-3 rounded-lg text-center font-medium ${message.includes('failed') || message.includes('error') || message.includes('wrong') ? 'bg-red-50 text-red-600 border border-red-200' : 'bg-green-50 text-green-600 border border-green-200'}`}>
                 {message}
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-5">
               
-              {/* Account Level Fields (Visible to both but Email disabled) */}
-              {identity !== 'brand' && (
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <div className="w-full">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                    <input type="text" name="name" value={formData.name} onChange={handleChange} className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
-                  </div>
-                  <div className="w-full">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                    <input type="email" name="email" value={formData.email} disabled className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 outline-none" />
-                  </div>
+              {/* Common Fields */}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="w-full">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                  <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Account Holder Name" className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
                 </div>
-              )}
+                <div className="w-full">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                  <input type="email" name="email" value={formData.email} disabled placeholder="Your registered email" className="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 outline-none" />
+                </div>
+              </div>
 
               {/* Identity Logic Applied Here */}
               {identity === 'brand' ? (
@@ -200,41 +248,82 @@ const AccountSetting = () => {
                       </select>
                     </div>
                   </div>
+                </>
+              ) : (
+                /* ========================================= */
+                /* CREATOR SPECIFIC FIELDS (Merged Layout)   */
+                /* ========================================= */
+                <>
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="w-full">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                      <input name="username" placeholder="@username" value={formData.username} onChange={handleChange} required className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
+                    </div>
+                    <div className="w-full">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Niche</label>
+                      <input name="niche" placeholder="e.g. Tech, Beauty, Gaming" value={formData.niche} onChange={handleChange} className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
+                    </div>
+                  </div>
 
-                  {/* Logo Upload Section */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Brand Logo</label>
-                    <div className="flex items-center gap-4 mt-2">
-                      {preview ? (
-                        <img src={preview} alt="Logo Preview" className="h-16 w-16 object-cover rounded-lg border border-gray-200 shadow-sm" />
-                      ) : (
-                        <div className="h-16 w-16 bg-gray-100 border border-gray-200 rounded-lg flex items-center justify-center text-gray-400">
-                          <Camera size={24} />
-                        </div>
-                      )}
-                      <input type="file" accept="image/*" onChange={handleLogoChange} className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition" />
+                  <div className="w-full">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Bio</label>
+                    <textarea name="bio" placeholder="Tell your story..." value={formData.bio} onChange={handleChange} required className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none min-h-[80px] resize-none" />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                     <div className="w-full">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                      <input name="location" placeholder="City, Country" value={formData.location} onChange={handleChange} className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
+                    </div>
+                    <div className="w-full">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Price Per Post (₹)</label>
+                      <input name="pricePerPost" type="number" placeholder="0" value={formData.pricePerPost} onChange={handleChange} className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="w-full">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Total Followers</label>
+                      <input name="followersCount" type="number" placeholder="0" value={formData.followersCount} onChange={handleChange} className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
+                    </div>
+                    <div className="w-full">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Engagement Rate (%)</label>
+                      <input name="engagementRate" type="number" step="0.1" placeholder="0.0" value={formData.engagementRate} onChange={handleChange} className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                     <div className="w-full">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Instagram URL</label>
+                      <input name="instagram" placeholder="https://instagram.com/..." value={formData.instagram} onChange={handleChange} className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
+                    </div>
+                    <div className="w-full">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">YouTube URL</label>
+                      <input name="youtube" placeholder="https://youtube.com/..." value={formData.youtube} onChange={handleChange} className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
                     </div>
                   </div>
                 </>
-              ) : (
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <div className="w-full">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Primary Platform</label>
-                    <select name="primaryPlatform" value={formData.primaryPlatform} onChange={handleChange} className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white">
-                      <option value="YouTube">YouTube</option>
-                      <option value="Instagram">Instagram</option>
-                      <option value="Twitter">Twitter / X</option>
-                    </select>
-                  </div>
-                  <div className="w-full">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Follower Count</label>
-                    <input type="number" name="followerCount" value={formData.followerCount} onChange={handleChange} className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
-                  </div>
-                </div>
               )}
 
-              <button type="submit" disabled={loading} className="mt-4 w-full sm:w-auto px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition disabled:opacity-70 disabled:cursor-not-allowed">
-                {loading ? "Saving..." : "Save Profile"}
+              {/* Image Upload Section (Unified for both Brand and Creator) */}
+              <div className="pt-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  {identity === 'brand' ? 'Brand Logo' : 'Profile Picture'}
+                </label>
+                <div className="flex items-center gap-4 mt-2">
+                  {preview ? (
+                    <img src={preview} alt="Preview" className={`object-cover border border-gray-200 shadow-sm ${identity === 'brand' ? 'h-16 w-16 rounded-lg' : 'h-20 w-20 rounded-full'}`} />
+                  ) : (
+                    <div className={`bg-gray-100 border border-gray-200 flex items-center justify-center text-gray-400 ${identity === 'brand' ? 'h-16 w-16 rounded-lg' : 'h-20 w-20 rounded-full'}`}>
+                      <Camera size={24} />
+                    </div>
+                  )}
+                  <input type="file" accept="image/*" onChange={handleImageChange} className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition" />
+                </div>
+              </div>
+
+              <button type="submit" disabled={loading} className="mt-6 w-full sm:w-auto px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition disabled:opacity-70 disabled:cursor-not-allowed shadow-md">
+                {loading ? "Saving..." : "Save Profile Details"}
               </button>
             </form>
           </div>
@@ -287,8 +376,8 @@ const AccountSetting = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 md:p-8 relative">
-      <div className="max-w-6xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row min-h-[70vh]">
+    <div className="min-h-[calc(100vh-80px)] bg-gray-900  relative overflow-y-auto scrollbar-hide">
+      <div className=" min-h-[calc(100vh-80px)] max-w-full mx-auto bg-white  shadow-lg overflow-hidden flex flex-col md:flex-row ">
         
         {/* SIDEBAR NAVIGATION */}
         <aside className="w-full md:w-64 bg-gray-50 border-r border-gray-200 p-4 md:p-6 flex-shrink-0">
@@ -377,7 +466,7 @@ const AccountSetting = () => {
               </div>
               <h2 className="text-2xl font-bold text-gray-800 mb-2">Verify your Email</h2>
               <p className="text-gray-600 mb-6">
-                We will send a verification link to <span className="font-semibold text-gray-800">{formData.email}</span>. Click the link inside to verify your account.
+                We will send a verification link to your email. Click the link inside to verify your account.
               </p>
               <button 
                 onClick={() => { alert('Verification link sent!'); setIsEmailModalOpen(false); }} 

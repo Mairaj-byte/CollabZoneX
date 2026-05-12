@@ -14,9 +14,7 @@ import InfluencerListing from "./pages/InfluencerListing";
 import InProfileDetail from "./pages/InProfileDetail";
 import BrandDetail from "./pages/BrandDetail";
 
-import BrandProfileSetup from "./pages/BrandProfileSetup";
-import InfluProfileSetup from "./pages/InfluProfileSetup";
-
+import UserProfile from "./pages/UserProfile";
 import AccountSetting from "./pages/AccountSetting"
 
 import CreateCampaign from "./pages/CreateCampaign";
@@ -44,7 +42,7 @@ const App = () => {
   const hideLayout = hideLayoutRoutes.includes(location.pathname);
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden">
+    <div className="flex flex-col h-screen">
       
       {/* Navbar */}
       {!hideLayout && <Navbar />}
@@ -85,10 +83,8 @@ const App = () => {
         <Route path='/reset_password' element={<ResetPassword />}/>
 
         {/* Setup Pages */}
-        <Route path="/brand-profile-setup" element={<BrandProfileSetup />} />
-        <Route path="/influ-profile-setup" element={<InfluProfileSetup />} />
-
-        <Route path="/account_setting" element={<AccountSetting/>}/>
+        <Route path="/My_Profile" element={<UserProfile/>} />
+        <Route path="/Account_Setting" element={<AccountSetting/>}/>
 
         {/* Static Pages */}
         <Route path="/aboutus" element={<AboutUs />} />

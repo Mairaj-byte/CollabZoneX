@@ -78,7 +78,8 @@ export const createOrUpdateProfile = async (req, res) => {
 
 export const getMyProfile = async (req, res) => {
   try {
-    const profile = await Creator.findOne({ userId: req.user.id });
+    // 🔹 ADDED .populate() HERE
+    const profile = await Creator.findOne({ userId: req.user.id }).populate("userId", "name email");
 
     if (!profile) {
       return res.status(404).json({ message: "Profile not found" });
