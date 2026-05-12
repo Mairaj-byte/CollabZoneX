@@ -49,9 +49,9 @@ const Navbar = () => {
             setProfile({
               name: json.data.brandName || "Brand User",
               avatar: json.data.logo || null,
-
+              
               // 👇 FIX IS HERE: Look inside the populated userId object
-              email: json.data.userId?.email || "brand@example.com"
+              email: json.data.userId?.email || "brand@example.com" 
             });
           }
         } else if (identity === "creator") {
@@ -60,14 +60,14 @@ const Navbar = () => {
           });
           const json = await res.json();
           const creatorData = json.data || json; // Handle both response shapes
-
+          
           if (creatorData) {
             setProfile({
               name: creatorData.username || "Creator User",
               avatar: creatorData.profileImage || null,
-
+              
               // 👇 FIX IS HERE: Look inside the populated userId object
-              email: creatorData.userId?.email || "creator@example.com"
+              email: creatorData.userId?.email || "creator@example.com" 
             });
           }
         }
@@ -237,14 +237,14 @@ const Navbar = () => {
 }
 const LogOut = ({ size, className }) => <svg
   xmlns="http://www.w3.org/2000/svg"
-  width="22"
-  height="22"
+  width="22" 
+  height="22" 
   viewBox="0 0 24 24"
   fill="none"
   stroke="currentColor"
-  stroke-width="2"
-  stroke-linecap="round"
-  stroke-linejoin="round"
+  strokeWidth="2" 
+  strokeLinecap="round" 
+  strokeLinejoin="round"
   className={className}
 >
   <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
