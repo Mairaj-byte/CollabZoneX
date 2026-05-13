@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import userModel from '../models/userModel.js'; 
+import userModel from '../models/userModel.js';
 import transporter from '../config/nodeMailer.js';
 
 // ================= SEND RESET OTP =================
@@ -92,7 +92,6 @@ export const resetPassword = async (req, res) => {
             });
         }
 
-        // Check expiry
         if (user.resetOtpExpiryAt < Date.now()) {
             return res.status(400).json({
                 success: false,

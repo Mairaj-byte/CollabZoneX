@@ -3,12 +3,13 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
-import { Mail, Lock, User, Eye, EyeOff, Briefcase, User2, KeyRound, ArrowLeft } from "lucide-react";
+import { Mail, Lock, User, Eye, EyeOff, Briefcase, User2 } from "lucide-react";
+import ResetPassword from "../components/ResetPassword";
 
-const SignInPage = () => {
+const SignInPage = ({ setReset }) => {
   const [currentState, setCurrentState] = useState("Login");
   const [showPassword, setShowPassword] = useState(false);
-  const [otpSent, setOtpSent] = useState(false); 
+  const [showResetModal, setShowResetModal] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -169,12 +170,23 @@ const SignInPage = () => {
           
           {currentState === "Sign Up" && (
             <div className="grid grid-cols-2 gap-3">
-              <label className={`cursor-pointer border-2 rounded-xl p-4 text-center transition-all flex flex-col items-center gap-2 ${formData.identity === "brand" ? "border-blue-600 bg-blue-50" : "border-gray-200"}`}>
+              <label
+                className={`cursor-pointer border-2 rounded-xl p-4 text-center transition-all flex flex-col items-center gap-2 ${formData.identity === "brand"
+                  ? "border-blue-600 bg-blue-50"
+                  : "border-gray-200"
+                  }`}
+              >
                 <Briefcase size={20} />
                 <input type="radio" name="identity" value="brand" className="hidden" onChange={handleInputChange} required />
                 <span className="text-sm font-medium">Brand</span>
               </label>
-              <label className={`cursor-pointer border-2 rounded-xl p-4 text-center transition-all flex flex-col items-center gap-2 ${formData.identity === "creator" ? "border-blue-600 bg-blue-50" : "border-gray-200"}`}>
+
+              <label
+                className={`cursor-pointer border-2 rounded-xl p-4 text-center transition-all flex flex-col items-center gap-2 ${formData.identity === "creator"
+                  ? "border-blue-600 bg-blue-50"
+                  : "border-gray-200"
+                  }`}
+              >
                 <User2 size={20} />
                 <input type="radio" name="identity" value="creator" className="hidden" onChange={handleInputChange} />
                 <span className="text-sm font-medium">Creator</span>
@@ -182,17 +194,14 @@ const SignInPage = () => {
             </div>
           )}
 
-          
-          <div className="flex justify-between items-center">
-            {currentState === "Login" ? (
-              <span onClick={() => {setCurrentState("Forgot Password"); setOtpSent(false)}} className="text-xs text-gray-400 hover:text-blue-600 cursor-pointer transition-colors">
-                Forgot Password?
-              </span>
-            ) : (
-              <span onClick={() => {setCurrentState("Login"); setOtpSent(false)}} className="text-xs text-blue-600 flex items-center gap-1 cursor-pointer font-medium">
-                <ArrowLeft size={14}/> Back to Login
-              </span>
-            )}
+          <div className="flex justify-end">
+            <button
+              type="button"
+              className="cursor-pointer text-blue-600 hover:underline ml-1 self-start"
+              onClick={() => setShowResetModal(true)}
+            >
+              Forget Password
+            </button>
           </div>
 
           <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition-all shadow-lg active:scale-[0.98]">
@@ -202,6 +211,7 @@ const SignInPage = () => {
           </button>
         </form>
       </div>
+      {showResetModal && <ResetPassword setReset={setShowResetModal} />}
     </div>
   );
 };
