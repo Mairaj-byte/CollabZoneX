@@ -7,6 +7,7 @@ import {
 } from "../controllers/creatorController.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 import upload from "../middleware/upload.js";
+import Creator from "../models/CreatorModel.js";
 const creatorRouter = express.Router();
 creatorRouter.post( "/",
   authMiddleware,

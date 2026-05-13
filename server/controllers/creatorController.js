@@ -1,6 +1,4 @@
 import Creator from "../models/CreatorModel.js";
-
-
 export const createOrUpdateProfile = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -78,31 +76,30 @@ export const createOrUpdateProfile = async (req, res) => {
 
 export const getMyProfile = async (req, res) => {
   try {
-    const profile = await Creator.findOne({ userId: req.user.id });
-
+    const profile = await Creator.findOne({ userId: req.user.id }).populate("userId", "name email");
     if (!profile) {
       return res.status(404).json({ message: "Profile not found" });
     }
 
     res.json(profile);
   } catch (err) {
+    console.error("CREATOR CRASH ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 };
 
 
-
 // function for list product
 export const listProfiles = async (req, res) => {
-    try {
-        
-        const profiles = await Creator.find({});
-        res.json({success:true, profiles })
+  try {
 
-    } catch (error) {
-        console.log(error)
-        res.json({ success: false, message: error.message })
-    }
+    const profiles = await Creator.find({});
+    res.json({ success: true, profiles })
+
+  } catch (error) {
+    console.log(error)
+    res.json({ success: false, message: error.message })
+  }
 }
 
 // export const singleProfile = async (req, res) => {

@@ -54,7 +54,8 @@ export const getOneBrand = async (req, res) => {
 // ✅ Get Logged-in Brand Profile
 export const getMyBrandProfile = async (req, res) => {
   try {
-    const brand = await Brand.findOne({ userId: req.user.id });
+    // 🔹 ADDED .populate() HERE
+    const brand = await Brand.findOne({ userId: req.user.id }).populate("userId", "name email");
 
     if (!brand) {
       return res.status(404).json({

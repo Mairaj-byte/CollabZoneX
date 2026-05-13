@@ -14,8 +14,8 @@ import InfluencerListing from "./pages/InfluencerListing";
 import InProfileDetail from "./pages/InProfileDetail";
 import BrandDetail from "./pages/BrandDetail";
 
-import BrandProfileSetup from "./pages/BrandProfileSetup";
-import InfluProfileSetup from "./pages/InfluProfileSetup";
+import UserProfile from "./pages/UserProfile";
+import AccountSetting from "./pages/AccountSetting"
 
 import CreateCampaign from "./pages/CreateCampaign";
 
@@ -25,12 +25,14 @@ import { LegalPage } from "./pages/LegalPage";
 
 // Components
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 import ProtectedRoute from "./pages/ProtectedRoute";
 
 // Toast
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+
+import ResetPassword from "./components/ResetPassword";
 
 const App = () => {
   const location = useLocation();
@@ -40,11 +42,10 @@ const App = () => {
   const hideLayout = hideLayoutRoutes.includes(location.pathname);
 
   return (
-    <div className="max-w-7xl mx-auto px-4">
-
+    <div className="flex flex-col h-screen">
+      
       {/* Navbar */}
       {!hideLayout && <Navbar />}
-
       {/* Routes */}
       <Routes>
 
@@ -79,9 +80,11 @@ const App = () => {
         <Route path="/profile/:id" element={<InProfileDetail />} />
         <Route path="/brand/:id" element={<BrandDetail />} />
 
+        <Route path='/reset_password' element={<ResetPassword />}/>
+
         {/* Setup Pages */}
-        <Route path="/brand-profile-setup" element={<BrandProfileSetup />} />
-        <Route path="/influ-profile-setup" element={<InfluProfileSetup />} />
+        <Route path="/My_Profile" element={<UserProfile/>} />
+        <Route path="/Account_Setting" element={<AccountSetting/>}/>
 
         {/* Static Pages */}
         <Route path="/aboutus" element={<AboutUs />} />
@@ -93,8 +96,6 @@ const App = () => {
 
       </Routes>
 
-      {/* Footer */}
-      {!hideLayout && <Footer />}
 
       <ToastContainer
         position="bottom-right"
