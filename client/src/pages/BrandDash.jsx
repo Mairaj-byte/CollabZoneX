@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import graph from "../assets/graph.jpg";
 import {
   LayoutDashboard,
   BarChart3,
@@ -47,71 +48,71 @@ const BrandDash = () => {
   ];
 
   const handleAdvancePayment = async (campaignId, amount) => {
-  try {
-    // 1. Create order from backend
-    const res = await fetch("http://localhost:4000/api/payment/advance/order", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        campaignId: campaignId,
-        amount: amount,
-      }),
-    });
+    try {
+      // 1. Create order from backend
+      const res = await fetch("http://localhost:4000/api/payment/advance/order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          campaignId: campaignId,
+          amount: amount,
+        }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    // 2. Open Razorpay popup
-    const options = {
-      key: "rzp_test_S4wlmSNbitLgNI", // 🔥 replace
-      amount: data.order.amount,
-      currency: "INR",
-      name: "Collab Platform",
-      description: "Advance Payment",
-      order_id: data.order.id,
+      // 2. Open Razorpay popup
+      const options = {
+        key: "rzp_test_S4wlmSNbitLgNI", // 🔥 replace
+        amount: data.order.amount,
+        currency: "INR",
+        name: "Collab Platform",
+        description: "Advance Payment",
+        order_id: data.order.id,
 
-      handler: async function (response) {
-        // 3. Verify payment
-        const verifyRes = await fetch(
-          "http://localhost:4000/api/payment/advance/verify",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              ...response,
-              campaignId: campaignId,
-              amount: amount,
-            }),
+        handler: async function (response) {
+          // 3. Verify payment
+          const verifyRes = await fetch(
+            "http://localhost:4000/api/payment/advance/verify",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                ...response,
+                campaignId: campaignId,
+                amount: amount,
+              }),
+            }
+          );
+
+          const verifyData = await verifyRes.json();
+
+          if (verifyData.success) {
+            alert("Advance Payment Successful ✅");
+
+            // 🔥 Refresh campaigns
+            window.location.reload();
+          } else {
+            alert("Payment verification failed ❌");
           }
-        );
+        },
 
-        const verifyData = await verifyRes.json();
+        theme: {
+          color: "#6366f1",
+        },
+      };
 
-        if (verifyData.success) {
-          alert("Advance Payment Successful ✅");
-
-          // 🔥 Refresh campaigns
-          window.location.reload();
-        } else {
-          alert("Payment verification failed ❌");
-        }
-      },
-
-      theme: {
-        color: "#6366f1",
-      },
-    };
-
-    const rzp = new window.Razorpay(options);
-    rzp.open();
-  } catch (error) {
-    console.error(error);
-    alert("Payment failed ❌");
-  }
-};
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (error) {
+      console.error(error);
+      alert("Payment failed ❌");
+    }
+  };
 
   const navItems = [
     { name: "Overview", icon: LayoutDashboard },
@@ -120,23 +121,23 @@ const BrandDash = () => {
     { name: "Settings", icon: Settings },
   ];
 
- useEffect(() => {
-  if (!userId) return; // 🔥 stop if not ready
+  useEffect(() => {
+    if (!userId) return; // 🔥 stop if not ready
 
-  const fetchCampaigns = async () => {
-    try {
-      const res = await fetch(
-        `http://localhost:4000/api/campaign/brand/${userId}`
-      );
-      const data = await res.json();
-      setCampaigns(data);
-    } catch (error) {
-      console.error("Error fetching campaigns:", error);
-    }
-  };
+    const fetchCampaigns = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:4000/api/campaign/brand/${userId}`
+        );
+        const data = await res.json();
+        setCampaigns(data);
+      } catch (error) {
+        console.error("Error fetching campaigns:", error);
+      }
+    };
 
-  fetchCampaigns();
-}, [userId]);
+    fetchCampaigns();
+  }, [userId]);
 
   return (
     <div className="mt-21 min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 flex">
@@ -174,8 +175,8 @@ const BrandDash = () => {
                   setSidebarOpen(false);
                 }}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${activeTab === item.name
-                    ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg"
-                    : "hover:bg-gray-100 text-gray-600"
+                  ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg"
+                  : "hover:bg-gray-100 text-gray-600"
                   }`}
               >
                 <Icon size={20} />
@@ -265,9 +266,15 @@ const BrandDash = () => {
               </button>
             </div>
 
-            <div className="h-72 flex items-center justify-center text-gray-400 italic">
-              Chart / Graph Placeholder
+            <div className="h-72 flex items-center justify-center">
+              <img
+                src={graph}
+                alt="Graph"
+                className="h-full w-full object-contain rounded-lg"
+              />
             </div>
+
+
           </div>
 
           {/* Campaign List */}
