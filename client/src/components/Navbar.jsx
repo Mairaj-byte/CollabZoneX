@@ -96,7 +96,7 @@ const Navbar = () => {
   // Safely calculate initials ONLY if profile.name exists
   const initials = profile.name ? profile.name.substring(0, 2).toUpperCase() : "US";
   return (
-    <nav className=" w-full flex h-20 justify-between items-center sm:px-8 sm:py-4 px-6 py-5">
+    <nav className=" w-full flex bg-blue-25 h-20 justify-between items-center sm:px-8 sm:py-4 px-6 py-5">
       <div className="flex justify-between gap-2">
         <h1
           className='text-4xl font-extrabold'

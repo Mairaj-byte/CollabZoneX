@@ -35,11 +35,11 @@ const LandingPage = () => {
 
   return (
 
-    <div className="mt-23 bg-white text-gray-900">
+    <div className="top-0 bg-gray-50 text-gray-900">
       
 
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-8 py-24 grid md:grid-cols-2 gap-12 items-center">
+      <section className="max-w-7xl mx-auto px-8 py-20 grid md:grid-cols-2 gap-12 items-center">
         <div>
           <h2 className="text-5xl black leading-tight">
             Connect Brands with <span className="text-blue-600">Influencers</span> That Convert
