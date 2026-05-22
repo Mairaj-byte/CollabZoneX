@@ -51,7 +51,7 @@ const BrandListing = () => {
   }
 
   return (
-    <div className="max-w-[1440px] mx-auto px-4 md:px-10 py-16 mt-10">
+    <div className="min-h-screen bg-[#f8fafc] px-6 py-15">
       
       {/* Header & Filter Section */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">

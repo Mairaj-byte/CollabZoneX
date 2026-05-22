@@ -33,7 +33,7 @@ const InfluencerListing = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] px-6 py-20 mt-15">
+    <div className="min-h-screen bg-[#f8fafc] px-6 py-15">
       <div className="max-w-[1600px] mx-auto">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
