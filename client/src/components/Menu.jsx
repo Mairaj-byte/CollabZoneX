@@ -7,7 +7,7 @@ const Menu = () => {
         <div className='bg-white border border-gray-200 w-50 flex flex-col gap-1 mt-0 mb-0 px-2 pt-4  overflow-y-clip sticky top-0'>
             <NavLink
                 to="#"
-                className='flex items-center gap-2 text-2xl text-center font-extrabold px-2 py-2 hover:bg-gray-100 rounded'>
+                className='flex items-center gap-2 text-xl text-center  px-2 py-2 mb-0 hover:bg-gray-100 rounded'>
                 <span >Home</span>
             </NavLink>
             <NavLink
