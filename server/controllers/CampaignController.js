@@ -37,7 +37,6 @@ export const createCampaign = async (req, res) => {
   }
 };
 
-
 export const getCreatorCampaigns = async (req, res) => {
   try {
     const campaigns = await Campaign.find({
@@ -59,9 +58,6 @@ export const getBrandCampaigns = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-
-
 
 export const updateCampaignStatus = async (req, res) => {
   try {

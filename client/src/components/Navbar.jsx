@@ -1,9 +1,7 @@
 import React, { useContext, useState, useRef, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { ShopContext } from "../context/ShopContext";
-import { Menu, X } from "lucide-react";
-import { toast } from "react-toastify";
-import { api } from '../utils/api'; // Assuming you use this elsewhere
+import { User, Settings, LogOut } from 'lucide-react'; // Grouped clean imports
 
 const DefaultAvatar = ({ initials }) => (
   <svg viewBox="0 0 100 100" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
@@ -27,7 +25,7 @@ const Navbar = () => {
   // Initialize with safe defaults to prevent 'null' errors on first render
   const [profile, setProfile] = useState({ name: "", avatar: null, email: "" });
   const [isProfile, setIsProfile] = useState(false);
-  const [isOpen, setIsOpen] = useState(false); // For mobile menu if you use it
+  const [isOpen, setIsOpen] = useState(false); 
 
   const menuRef = useRef(null);
 
@@ -49,8 +47,6 @@ const Navbar = () => {
             setProfile({
               name: json.data.brandName || "Brand User",
               avatar: json.data.logo || null,
-              
-              // 👇 FIX IS HERE: Look inside the populated userId object
               email: json.data.userId?.email || "brand@example.com" 
             });
           }
@@ -59,14 +55,12 @@ const Navbar = () => {
             headers: { Authorization: `Bearer ${token}` },
           });
           const json = await res.json();
-          const creatorData = json.data || json; // Handle both response shapes
+          const creatorData = json.data || json; 
           
           if (creatorData) {
             setProfile({
               name: creatorData.username || "Creator User",
               avatar: creatorData.profileImage || null,
-              
-              // 👇 FIX IS HERE: Look inside the populated userId object
               email: creatorData.userId?.email || "creator@example.com" 
             });
           }
@@ -95,165 +89,201 @@ const Navbar = () => {
 
   // Safely calculate initials ONLY if profile.name exists
   const initials = profile.name ? profile.name.substring(0, 2).toUpperCase() : "US";
+  
   return (
-    <nav className=" w-full flex bg-blue-25 h-20 justify-between items-center sm:px-8 sm:py-4 px-6 py-5">
-      <div className="flex justify-between gap-2">
-        <h1
-          className='text-4xl font-extrabold'
-          onClick={() => navigate("/")}
-        >
-          CollabZoneX
-        </h1>
-      </div>
-      <div className="flex gap-8">
-        {token && (
-          <div className="flex gap-8">
-            <NavLink to="/brandlist" className='text-left px-2 py-2 hover:bg-gray-200 rounded'>
-              Brands
-            </NavLink>
-
-            <NavLink to="/influlist" className='text-left px-2 py-2 hover:bg-gray-200 rounded'>
-              Creators
-            </NavLink>
-
-            {identity === "brand" && (
-              <NavLink to="/branddash" className='text-left px-2 py-2 hover:bg-gray-200 rounded'>
-                Dashboard
-              </NavLink>
-            )}
-
-            {identity === "creator" && (
-              <NavLink to="/influencerdash" className='text-left px-2 py-2 hover:bg-gray-200 rounded'>
-                Dashboard
-              </NavLink>
-            )}
-          </div>
-        )}
-        {!token && (
-          <button
-            onClick={handleGetStarted}
-            className="hidden md:block bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700"
+    // Floating container structure
+    <div className="fixed top-0 left-0 w-full z-50 px-4 pt-4 sm:px-6 lg:px-8">
+      <nav className="mx-auto max-w-7xl backdrop-blur-md bg-white/75 dark:bg-slate-900/75 border border-slate-200/50 dark:border-slate-700/50 shadow-lg rounded-2xl h-20 flex justify-between items-center px-6 transition-all duration-300">
+        
+        {/* Brand Logo with Premium Gradient */}
+        <div className="flex items-center">
+          <h1
+            className="text-2xl sm:text-3xl font-black tracking-tight bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 bg-clip-text text-transparent hover:scale-105 transition-transform duration-200 cursor-pointer"
+            onClick={() => navigate("/")}
           >
-            Get Started
-          </button>
-        )}
-        {token && (
-          <div className="relative" ref={menuRef}>
-            <button
-              onClick={() => setIsProfile(!isProfile)}
-              className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-gray-200 hover:border-blue-500 transition-all focus:outline-none overflow-hidden bg-gray-100"
-            >
-              {profile.avatar ? (
-                <img src={profile.avatar} alt="Profile" className="w-full h-full object-cover" />
-              ) : (
-                <DefaultAvatar initials={initials} />
-              )}
-            </button>
+            CollabZone<span className="text-indigo-600 dark:text-indigo-400">X</span>
+          </h1>
+        </div>
 
-            {isProfile && (
-              <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
-                <div className="px-4 py-2 border-b border-gray-100">
-                  <p className="text-sm font-semibold text-gray-800">{profile.name}</p>
-                  <p className="text-xs text-gray-500 truncate">{profile.email}</p>
-                </div>
-
-                <div className="py-1">
-                  <button
-                    className="w-full flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
-                    onClick={() => { navigate("/My_Profile"); setIsProfile(!isProfile); }}
-                  ><User size={16} className="mr-3 text-gray-400" /> My Profile
-                  </button>
-                  <button
-                    className="w-full flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
-                    onClick={() => { navigate("/Account_Setting"); setIsProfile(!isProfile); }}
-                  ><Settings size={16} className="mr-3 text-gray-400" /> Account Settings
-                  </button>
-                </div>
-
-                <hr className="my-1 border-gray-100" />
-
-                <button
-                  onClick={logout}
-                  className="w-full flex items-center px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors font-medium cursor-pointer"
-                >
-                  <LogOut size={16} className="mr-3" /> Log Out
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-      {isOpen && (
-        <div className="absolute top-16 left-0 w-full bg-white shadow-md flex flex-col items-center space-y-5 py-6 md:hidden">
-
-          {token ? (
-            <>
-              <NavLink to="/brandlist" onClick={toggleMenu}>
+        {/* Center/Right Navigation links */}
+        <div className="flex items-center gap-6">
+          {token && (
+            <div className="hidden md:flex items-center gap-1 bg-slate-100/80 dark:bg-slate-800/80 p-1.5 rounded-xl border border-slate-200/30">
+              <NavLink 
+                to="/brandlist" 
+                className={({ isActive }) => 
+                  `px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                    isActive 
+                      ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm' 
+                      : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                  }`
+                }
+              >
                 Brands
               </NavLink>
 
-              <NavLink to="/influlist" onClick={toggleMenu}>
+              <NavLink 
+                to="/influlist" 
+                className={({ isActive }) => 
+                  `px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                    isActive 
+                      ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm' 
+                      : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                  }`
+                }
+              >
                 Creators
               </NavLink>
 
               {identity === "brand" && (
-                <NavLink to="/branddash" onClick={toggleMenu}>
+                <NavLink 
+                  to="/branddash" 
+                  className={({ isActive }) => 
+                    `px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                      isActive 
+                        ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm' 
+                        : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                    }`
+                  }
+                >
                   Dashboard
                 </NavLink>
               )}
 
               {identity === "creator" && (
-                <NavLink to="/influencerdash" onClick={toggleMenu}>
+                <NavLink 
+                  to="/influencerdash" 
+                  className={({ isActive }) => 
+                    `px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                      isActive 
+                        ? 'bg-white dark:bg-slate-700 text-blue-600 dark:text-white shadow-sm' 
+                        : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                    }`
+                  }
+                >
                   Dashboard
                 </NavLink>
               )}
-
-              <button
-                onClick={() => {
-                  logout();
-                  toggleMenu();
-                }}
-                className="text-red-500 font-medium"
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <button
-              onClick={() => {
-                handleGetStarted();
-                toggleMenu();
-              }}
-              className="bg-blue-600 text-white px-5 py-2 rounded-lg"
-            >
-              Get Started
-            </button>
+            </div>
           )}
+
+          {/* Action Button / Profile Section */}
+          <div className="flex items-center gap-4">
+            {!token && (
+              <button
+                onClick={handleGetStarted}
+                className="relative group overflow-hidden px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium text-sm rounded-xl shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-200"
+              >
+                <span className="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
+                Get Started
+              </button>
+            )}
+
+            {token && (
+              <div className="relative" ref={menuRef}>
+                <button
+                  onClick={() => setIsProfile(!isProfile)}
+                  className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-slate-200 hover:border-indigo-500 dark:border-slate-700 transition-all focus:outline-none overflow-hidden bg-slate-100 p-0.5 shadow-sm"
+                >
+                  {profile.avatar ? (
+                    <img src={profile.avatar} alt="Profile" className="w-full h-full rounded-full object-cover" />
+                  ) : (
+                    <DefaultAvatar initials={initials} />
+                  )}
+                </button>
+
+                {/* Profile Dropdown Card */}
+                {isProfile && (
+                  <div className="absolute right-0 mt-3 w-56 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl shadow-xl py-2 z-50 transform origin-top-right transition-all duration-200">
+                    <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                      <p className="text-sm font-semibold text-slate-800 dark:text-white">{profile.name}</p>
+                      <p className="text-xs text-slate-400 truncate mt-0.5">{profile.email}</p>
+                    </div>
+
+                    <div className="p-1">
+                      <button
+                        className="w-full flex items-center px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-lg transition-colors cursor-pointer"
+                        onClick={() => { navigate("/My_Profile"); setIsProfile(!isProfile); }}
+                      >
+                        <User size={16} className="mr-3 text-slate-400" /> My Profile
+                      </button>
+                      <button
+                        className="w-full flex items-center px-3 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-lg transition-colors cursor-pointer"
+                        onClick={() => { navigate("/Account_Setting"); setIsProfile(!isProfile); }}
+                      >
+                        <Settings size={16} className="mr-3 text-slate-400" /> Account Settings
+                      </button>
+                    </div>
+
+                    <div className="border-t border-slate-100 dark:border-slate-700 my-1"></div>
+
+                    <div className="p-1">
+                      <button
+                        onClick={logout}
+                        className="w-full flex items-center px-3 py-2 text-sm text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-lg transition-colors font-medium cursor-pointer"
+                      >
+                        <LogOut size={16} className="mr-3" /> Log Out
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Mobile Menu Trigger */}
+            <button 
+              onClick={toggleMenu} 
+              className="md:hidden p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}/>
+              </svg>
+            </button>
+          </div>
         </div>
-      )}
-    </nav>
 
-  )
-}
-const LogOut = ({ size, className }) => <svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="22" 
-  height="22" 
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="currentColor"
-  strokeWidth="2" 
-  strokeLinecap="round" 
-  strokeLinejoin="round"
-  className={className}
->
-  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-  <polyline points="16 17 21 12 16 7" />
-  <line x1="21" y1="12" x2="9" y2="12" />
-</svg>
+        {/* Mobile Menu Dropdown Overlay */}
+        {isOpen && (
+          <div className="absolute top-24 left-0 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg shadow-xl rounded-2xl border border-slate-100 dark:border-slate-800 flex flex-col p-4 space-y-2 md:hidden">
+            {token ? (
+              <>
+                <NavLink to="/brandlist" onClick={toggleMenu} className="px-4 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 font-medium text-slate-700 dark:text-slate-200">
+                  Brands
+                </NavLink>
+                <NavLink to="/influlist" onClick={toggleMenu} className="px-4 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 font-medium text-slate-700 dark:text-slate-200">
+                  Creators
+                </NavLink>
+                {identity === "brand" && (
+                  <NavLink to="/branddash" onClick={toggleMenu} className="px-4 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 font-medium text-slate-700 dark:text-slate-200">
+                    Dashboard
+                  </NavLink>
+                )}
+                {identity === "creator" && (
+                  <NavLink to="/influencerdash" onClick={toggleMenu} className="px-4 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 font-medium text-slate-700 dark:text-slate-200">
+                    Dashboard
+                  </NavLink>
+                )}
+                <hr className="border-slate-100 dark:border-slate-800 my-1" />
+                <button
+                  onClick={() => { logout(); toggleMenu(); }}
+                  className="w-full text-left px-4 py-2.5 text-rose-500 font-medium rounded-xl hover:bg-rose-50 dark:hover:bg-rose-950/20"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => { handleGetStarted(); toggleMenu(); }}
+                className="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium rounded-xl text-center shadow-md shadow-blue-500/20"
+              >
+                Get Started
+              </button>
+            )}
+          </div>
+        )}
+      </nav>
+    </div>
+  );
+};
 
-
-const User = ({ size, className }) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>;
-const Settings = ({ size, className }) => <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>;
 export default Navbar;

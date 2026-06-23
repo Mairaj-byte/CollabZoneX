@@ -1,7 +1,5 @@
 import Brand from "../models/brandModel.js";
 
-
-
 export const getBrands = async (req, res) => {
   try {
     const brands = await Brand.find().populate("userId", "name email");
@@ -19,7 +17,6 @@ export const getBrands = async (req, res) => {
     });
   }
 };
-
 
 export const getOneBrand = async (req, res) => {
   try {
@@ -49,12 +46,8 @@ export const getOneBrand = async (req, res) => {
 };
 
 
-
-
-// ✅ Get Logged-in Brand Profile
 export const getMyBrandProfile = async (req, res) => {
   try {
-    // 🔹 ADDED .populate() HERE
     const brand = await Brand.findOne({ userId: req.user.id }).populate("userId", "name email");
 
     if (!brand) {
@@ -77,18 +70,14 @@ export const getMyBrandProfile = async (req, res) => {
   }
 };
 
-
-// ✅ Create OR Update Brand Profile
 export const createOrUpdateProfile = async (req, res) => {
   try {
     const { brandName, industry, website, budgetRange } = req.body;
 
-    // Cloudinary image path
     const logo = req.file ? req.file.path : null;
 
     let brand = await Brand.findOne({ userId: req.user.id });
 
-    // 🔁 UPDATE
     if (brand) {
       brand.brandName = brandName || brand.brandName;
       brand.industry = industry || brand.industry;
@@ -108,7 +97,6 @@ export const createOrUpdateProfile = async (req, res) => {
       });
     }
 
-    // ➕ CREATE
     brand = await Brand.create({
       userId: req.user.id,
       brandName,

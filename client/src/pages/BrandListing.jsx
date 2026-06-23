@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronDown, Filter, ArrowUpDown } from "lucide-react";
+import { ChevronDown, Filter, ArrowUpRight } from "lucide-react";
 
 const BrandListing = () => {
   const [brands, setBrands] = useState([]);
@@ -27,7 +27,6 @@ const BrandListing = () => {
     fetchBrands();
   }, []);
 
-  // Helper to extract number from budget string (e.g., "$500" -> 500)
   const getBudgetNumber = (budgetString) => {
     return Number(budgetString.replace(/[^0-9.-]+/g, "")) || 0;
   };
@@ -44,99 +43,106 @@ const BrandListing = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="flex justify-center items-center h-screen bg-[#f8fafc]">
+        <div className="relative w-12 h-12">
+          <div className="absolute w-full h-full border-4 border-blue-100 rounded-full"></div>
+          <div className="absolute w-full h-full border-4 border-blue-600 rounded-full animate-spin border-t-transparent"></div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] px-6 py-15">
+    <div className="min-h-screen bg-[#f8fafc] px-4 sm:px-8 py-12 mt-16">
       
       {/* Header & Filter Section */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-10 max-w-7xl mx-auto">
         <div>
-          <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
             Partner Brands
           </h1>
-          <p className="text-slate-500 mt-2 text-lg">
+          <p className="text-slate-400 mt-1 text-sm sm:text-base">
             Discover {brands.length} industry leaders ready to collaborate.
           </p>
         </div>
 
-        {/* Sort Dropdown */}
+        {/* Custom Pill-Style Sort Dropdown Container */}
         <div className="relative inline-block text-left">
-          <div className="flex items-center gap-3">
-            <span className="text-sm font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-              <Filter size={14} /> Sort By:
+          <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-slate-200/60 shadow-sm">
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1 pl-1">
+              <Filter size={12} className="text-slate-400" /> Sort:
             </span>
-            <select
-              value={sortOrder}
-              onChange={(e) => handleSort(e.target.value)}
-              className="appearance-none bg-white border border-slate-200 text-slate-700 py-2 px-4 pr-10 rounded-xl font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer hover:border-blue-300 transition-all shadow-sm"
-            >
-              <option value="">Featured</option>
-              <option value="low-high">Budget: Low to High</option>
-              <option value="high-low">Budget: High to Low</option>
-            </select>
-            <div className="pointer-events-none absolute right-3 bottom-3 text-slate-400">
-              <ChevronDown size={18} />
+            <div className="relative flex items-center">
+              <select
+                value={sortOrder}
+                onChange={(e) => handleSort(e.target.value)}
+                className="appearance-none bg-transparent text-slate-700 text-sm py-1 pl-1 pr-7 font-semibold focus:outline-none cursor-pointer hover:text-blue-600 transition-colors"
+              >
+                <option value="">Featured</option>
+                <option value="low-high">Budget: Low → High</option>
+                <option value="high-low">Budget: High → Low</option>
+              </select>
+              <div className="pointer-events-none absolute right-1 text-slate-400">
+                <ChevronDown size={14} />
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* --- Responsive Grid --- */}
-      {/* grid-cols-2 is the key for mobile! */}
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
+      {/* Grid Layout forced into dynamic 4 columns on large viewport breaklines */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 max-w-7xl mx-auto">
         {filteredBrands.map((brand) => (
           <div
             key={brand._id}
             onClick={() => navigate(`/brand/${brand._id}`)}
-            className="group bg-white border border-slate-100 rounded-2xl md:rounded-3xl overflow-hidden hover:shadow-2xl hover:shadow-blue-100 transition-all duration-300 cursor-pointer flex flex-col"
+            className="group bg-white border border-slate-100 rounded-xl overflow-hidden hover:shadow-[0_20px_50px_rgba(59,_130,_246,_0.08)] transition-all duration-300 cursor-pointer flex flex-col transform hover:-translate-y-1"
           >
-            {/* Image Container */}
-            <div className="relative h-32 sm:h-44 overflow-hidden bg-slate-50">
+            {/* Image / Logo Cover container (Slightly smaller height) */}
+            <div className="relative h-28 sm:h-36 bg-gradient-to-br from-slate-50 to-slate-100/50 flex items-center justify-center overflow-hidden border-b border-slate-100">
               {brand.logo && brand.logo.startsWith("http") ? (
                 <img
                   src={brand.logo}
                   alt={brand.brandName}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-slate-300 font-bold text-2xl">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-black text-xl shadow-md">
                   {brand.brandName.charAt(0)}
                 </div>
               )}
               
-              {/* Desktop Industry Tag */}
-              <div className="absolute top-3 right-3 hidden sm:block">
-                <span className="bg-white/90 backdrop-blur-md text-[10px] font-bold text-blue-700 px-2 py-1 rounded-lg shadow-sm border border-blue-50">
+              {/* Premium Frosted Floating Industry Tag */}
+              <div className="absolute top-2.5 right-2.5">
+                <span className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md text-[10px] font-bold text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-md shadow-sm border border-slate-200/40">
                   {brand.industry}
                 </span>
               </div>
             </div>
 
-            {/* Content Container */}
-            <div className="p-3 md:p-6 flex-grow flex flex-col justify-between">
+            {/* Tightened Content Info Matrix */}
+            <div className="p-4 flex-grow flex flex-col justify-between bg-white">
               <div>
-                <h2 className="text-sm md:text-lg font-bold text-slate-800 line-clamp-1 group-hover:text-blue-600 transition-colors">
+                <h2 className="text-base font-bold text-slate-800 line-clamp-1 group-hover:text-blue-600 transition-colors tracking-tight">
                   {brand.brandName}
                 </h2>
-                <p className="text-[10px] md:text-xs uppercase tracking-tighter md:tracking-wider font-semibold text-slate-400 mt-1">
+                <p className="text-[11px] uppercase tracking-wider font-medium text-slate-400 mt-0.5">
                   {brand.industry}
                 </p>
               </div>
               
-              <div className="mt-3 md:mt-5 pt-3 border-t border-slate-50 flex items-center justify-between">
+              {/* Card Footer: Budget Metric Block */}
+              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
                 <div className="flex flex-col">
-                  <span className="text-[10px] text-slate-400 font-medium">Budget</span>
-                  <span className="text-xs md:text-sm font-bold text-blue-600">
+                  <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Est. Budget</span>
+                  <span className="text-sm font-extrabold text-blue-600 tracking-tight mt-0.5">
                     {brand.budgetRange}
                   </span>
                 </div>
-                <div className="hidden md:flex h-8 w-8 items-center justify-center rounded-full bg-blue-50 text-blue-600 opacity-0 group-hover:opacity-100 transition-all transform translate-x-2 group-hover:translate-x-0">
-                  <ArrowUpDown size={14} />
+                
+                {/* Clean Micro-arrow pointer effect */}
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-50 text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                  <ArrowUpRight size={14} className="transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </div>
               </div>
             </div>
@@ -144,10 +150,10 @@ const BrandListing = () => {
         ))}
       </div>
 
-      {/* Empty State */}
+      {/* Empty Fallback State Container */}
       {filteredBrands.length === 0 && (
-        <div className="text-center py-20">
-          <p className="text-slate-400 text-lg">No brands found matching your criteria.</p>
+        <div className="text-center py-24 max-w-7xl mx-auto bg-white border border-dashed border-slate-200 rounded-2xl mt-4">
+          <p className="text-slate-400 text-base font-medium">No brands found matching your criteria.</p>
         </div>
       )}
     </div>

@@ -17,11 +17,10 @@ export const createOrUpdateProfile = async (req, res) => {
 
     let profile = await Creator.findOne({ userId });
 
-    // Handle Image
     let imageUrl = profile?.profileImage || "";
 
     if (req.file) {
-      imageUrl = req.file.path; // Cloudinary URL
+      imageUrl = req.file.path;
     }
 
     const profileData = {
@@ -71,9 +70,6 @@ export const createOrUpdateProfile = async (req, res) => {
   }
 };
 
-
-
-
 export const getMyProfile = async (req, res) => {
   try {
     const profile = await Creator.findOne({ userId: req.user.id }).populate("userId", "name email");
@@ -88,8 +84,6 @@ export const getMyProfile = async (req, res) => {
   }
 };
 
-
-// function for list product
 export const listProfiles = async (req, res) => {
   try {
 
@@ -101,32 +95,6 @@ export const listProfiles = async (req, res) => {
     res.json({ success: false, message: error.message })
   }
 }
-
-// export const singleProfile = async (req, res) => {
-//   try {
-//     const { userId } = req.params;
-
-//     const profile = await Creator.findById(userId);
-
-//     if (!profile) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "Profile not found",
-//       });
-//     }
-
-//     res.json({ success: true, profile });
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).json({
-//       success: false,
-//       message: error.message,
-//     });
-//   }
-// };
-
-
-
 
 export const getCreatorProfileByUserId = async (req, res) => {
   try {

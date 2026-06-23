@@ -24,7 +24,7 @@ const BrandDetail = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#fcfdfe] mt-18">
+    <div className="min-h-screen bg-[#fcfdfe] mt-7">
       {/* Top Navigation Bar */}
       <div className="max-w-7xl mx-auto px-6 pt-10">
         <button 
@@ -39,7 +39,7 @@ const BrandDetail = () => {
       <div className="max-w-6xl mx-auto px-6 py-8">
   <div className="bg-white rounded-lg overflow-hidden shadow-xl shadow-blue-100 border border-slate-100 flex flex-col lg:flex-row">
     
-    {/* LEFT: IMAGE SECTION */}
+    
     <div className="lg:w-1/2 relative bg-slate-50 min-h-[320px]">
       {brand.logo && brand.logo.startsWith("http") ? (
         <img
@@ -59,7 +59,7 @@ const BrandDetail = () => {
       </div>
     </div>
 
-    {/* RIGHT: CONTENT SECTION */}
+    
     <div className="lg:w-1/2 p-8 lg:p-10 flex flex-col justify-center">
       <h1 className="text-3xl lg:text-4xl font-extrabold text-slate-900 mb-4">
         {brand.brandName}

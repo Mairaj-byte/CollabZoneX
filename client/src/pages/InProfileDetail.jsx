@@ -56,7 +56,7 @@ const InProfileDetail = () => {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] py-12 px-4 md:px-10 lg:py-24">
-      {/* Decorative Background Element */}
+     
       <div className="fixed top-0 right-0 -z-10 w-1/2 h-1/2 bg-blue-50 blur-[120px] rounded-full opacity-50"></div>
 
       <div className="max-w-6xl mx-auto">
@@ -71,7 +71,7 @@ const InProfileDetail = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           
-          {/* LEFT COLUMN: BIG PICTURE */}
+          
           <div className="lg:col-span-5">
             <div className="relative group">
               <div className="absolute -inset-1 bg-gradient-to-tr from-blue-500 to-purple-500 rounded-[3rem] blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
@@ -87,7 +87,7 @@ const InProfileDetail = () => {
             </div>
           </div>
 
-          {/* RIGHT COLUMN: INFO */}
+          
           <div className="lg:col-span-7 flex flex-col space-y-8">
             <section>
               <div className="flex items-center gap-3 mb-2">
@@ -105,7 +105,7 @@ const InProfileDetail = () => {
               </p>
             </section>
 
-            {/* HIGH IMPACT STATS */}
+           
             <div className="grid grid-cols-3 gap-1 bg-slate-900 rounded-[2rem] p-1 shadow-xl overflow-hidden">
               <div className="bg-slate-800 py-6 text-center border-r border-slate-700">
                 <p className="text-2xl font-bold text-white">{followersCount?.toLocaleString()}</p>
@@ -121,7 +121,7 @@ const InProfileDetail = () => {
               </div>
             </div>
 
-            {/* ACTION CENTER */}
+            
             <div className="flex flex-wrap gap-4 pt-4">
               <button  onClick={() => navigate(`/createcampaign/${id}`)} className="flex-1 min-w-[200px] bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg shadow-indigo-200 transition-all active:scale-95">
                 Hire {username}

@@ -248,8 +248,8 @@ const BrandDash = () => {
                 ))}
               </div>
 
-              {/* Chart */}
-              <div className="bg-white/70 backdrop-blur-xl border border-gray-200 rounded-3xl shadow-xl overflow-hidden mb-10">
+              
+              {/* <div className="bg-white/70 backdrop-blur-xl border border-gray-200 rounded-3xl shadow-xl overflow-hidden mb-10">
                 <div className="p-6 border-b border-gray-200 flex justify-between items-center">
                   <h3 className="text-lg font-semibold">Campaign Analytics</h3>
                   <button className="flex items-center gap-1 text-indigo-600 font-medium text-sm">
@@ -260,7 +260,7 @@ const BrandDash = () => {
                 <div className="h-72 flex items-center justify-center text-gray-400 italic">
                   Chart / Graph Placeholder
                 </div>
-              </div>
+              </div> */}
 
               {/* Campaign List */}
               <div>
