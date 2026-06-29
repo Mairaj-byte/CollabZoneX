@@ -30,7 +30,7 @@ const SignInPage = () => {
   const handleSendOtp = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.post("http://localhost:4000/api/send-reset-otp", { email: formData.email });
+      const { data } = await axios.post("https://collab-zone-x.vercel.app/api/send-reset-otp", { email: formData.email });
       if (data.success) {
         toast.success(data.message || "OTP sent successfully!");
         setOtpSent(true);
@@ -46,7 +46,7 @@ const SignInPage = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await axios.post("http://localhost:4000/api/reset-password", {
+      const { data } = await axios.post("https://collab-zone-x.vercel.app/api/reset-password", {
         email: formData.email,
         otp: formData.otp,
         newPassword: formData.newPassword
@@ -78,7 +78,7 @@ const SignInPage = () => {
     setLoading(true);
     try {
       const isSignUp = currentState === "Sign Up";
-      const url = `http://localhost:4000/api/user/${isSignUp ? "register" : "login"}`;
+      const url = `https://collab-zone-x.vercel.app/api/user/${isSignUp ? "register" : "login"}`;
       const payload = isSignUp
         ? formData
         : { email: formData.email, password: formData.password };
