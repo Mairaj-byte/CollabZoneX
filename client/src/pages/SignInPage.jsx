@@ -27,10 +27,12 @@ const SignInPage = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
   const handleSendOtp = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.post("https://collab-zone-x.vercel.app/api/send-reset-otp", { email: formData.email });
+      const { data } = await axios.post(`${backendUrl}/api/send-reset-otp`, { email: formData.email });
       if (data.success) {
         toast.success(data.message || "OTP sent successfully!");
         setOtpSent(true);
@@ -46,7 +48,7 @@ const SignInPage = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await axios.post("https://collab-zone-x.vercel.app/api/reset-password", {
+      const { data } = await axios.post(`${backendUrl}/api/reset-password`, {
         email: formData.email,
         otp: formData.otp,
         newPassword: formData.newPassword
@@ -78,7 +80,7 @@ const SignInPage = () => {
     setLoading(true);
     try {
       const isSignUp = currentState === "Sign Up";
-      const url = `https://collab-zone-x.vercel.app/api/user/${isSignUp ? "register" : "login"}`;
+      const url = `${backendUrl}/api/user/${isSignUp ? "register" : "login"}`;
       const payload = isSignUp
         ? formData
         : { email: formData.email, password: formData.password };
@@ -93,7 +95,7 @@ const SignInPage = () => {
         setToken(data.token);
         setIdentity(data.user.identity);
 
-        toast.success(isSignUp ? "Welcome to the ecosystem! 🎉" : "Welcome back! ✨");
+        toast.success(isSignUp ? "Welcome to the ecosystem! " : "Welcome back! ");
 
         navigate(isSignUp 
           ? (data.user.identity === "brand" ? "/brand-profile-setup" : "/influ-profile-setup")

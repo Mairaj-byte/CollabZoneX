@@ -3,13 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { ShopContext } from '../context/ShopContext';
 import { User, Lock, CreditCard, Bell, Briefcase, Camera, LogOut, Mail, X } from 'lucide-react';
 
-
 const AccountSetting = () => {
   const navigate = useNavigate();
   const { token, identity, logout } = useContext(ShopContext);
 
   const [activeTab, setActiveTab] = useState('profile');
-  const backendUrl = import.meta.env.BACKEND_URL;
   
   // Modal states
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
@@ -46,13 +44,15 @@ const AccountSetting = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
   useEffect(() => {
     const fetchProfile = async () => {
       if (!token) return;
 
       try {
         if (identity === "brand") {
-          const res = await fetch("${backendUrl}/api/brand/me", {
+          const res = await fetch(`${backendUrl}/api/brand/me`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           const data = await res.json();
@@ -69,7 +69,7 @@ const AccountSetting = () => {
           }
         } else {
           
-          const res = await fetch("${backendUrl}/api/creator/me", {
+          const res = await fetch(`${backendUrl}/api/creator/me`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           
@@ -132,7 +132,7 @@ const AccountSetting = () => {
         form.append("budgetRange", formData.budgetRange);
         if (profileImage) form.append("logo", profileImage);
 
-        const res = await fetch("backendUrl/api/brand", {
+        const res = await fetch(`${backendUrl}/api/brand`, {
           method: "POST",
           headers: { Authorization: `Bearer ${token}` },
           body: form,
@@ -161,7 +161,7 @@ const AccountSetting = () => {
           form.append("profileImage", profileImage);
         }
 
-        const res = await fetch("backendUrl/api/creator", {
+        const res = await fetch(`${backendUrl}/api/creator`, {
           method: "POST",
           headers: { Authorization: `Bearer ${token}` },
           body: form,

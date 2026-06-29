@@ -20,6 +20,8 @@ const CreateCampaign = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
@@ -39,7 +41,7 @@ const CreateCampaign = () => {
       const token = localStorage.getItem("token");
 
       await axios.post(
-        "http://localhost:4000/api/campaign/create",
+        `${backendUrl}/api/campaign/create`,
         {
           influencerId: id,
           title: form.title,

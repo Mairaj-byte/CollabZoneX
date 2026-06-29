@@ -45,9 +45,11 @@ const InfluencerDash = () => {
   const [campaigns, setCampaigns] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
   const fetchCampaigns = async () => {
     try {
-      const res = await fetch(`http://localhost:4000/api/campaign/creator/${userId}`);
+      const res = await fetch(`${backendUrl}/api/campaign/creator/${userId}`);
       const data = await res.json();
       setCampaigns(data);
     } catch (error) {
@@ -65,7 +67,7 @@ const InfluencerDash = () => {
 
   const handleAccept = async (campaignId) => {
     try {
-      await axios.put(`http://localhost:4000/api/campaign/status/${campaignId}`, {
+      await axios.put(`${backendUrl}/api/campaign/status/${campaignId}`, {
         status: "accepted",
       });
       fetchCampaigns();
@@ -76,7 +78,7 @@ const InfluencerDash = () => {
 
   const handleReject = async (campaignId) => {
     try {
-      await axios.put(`http://localhost:4000/api/campaign/status/${campaignId}`, {
+      await axios.put(`${backendUrl}/api/campaign/status/${campaignId}`, {
         status: "rejected",
       });
       fetchCampaigns();

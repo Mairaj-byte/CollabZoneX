@@ -10,25 +10,28 @@ const BrandListing = () => {
   const [sortOrder, setSortOrder] = useState(""); 
   const navigate = useNavigate();
 
-  const backendUrl = import.meta.env.BACKEND_URL;
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  
 
-  useEffect(() => {
-    const fetchBrands = async () => {
-      try {
-        const res = await fetch("${backendUrl}/api/brand/list");
-        const brand = await res.json();
-        if (brand.success) {
-          setBrands(brand.data);
-          setFilteredBrands(brand.data);
-        }
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
+useEffect(() => {
+  const fetchBrands = async () => {
+    try {
+      const res = await fetch(`${backendUrl}/api/brand/list`);
+      const brand = await res.json();
+
+      if (brand.success) {
+        setBrands(brand.data);
+        setFilteredBrands(brand.data);
       }
-    };
-    fetchBrands();
-  }, []);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchBrands();
+}, [backendUrl]);
 
   const getBudgetNumber = (budgetString) => {
     return Number(budgetString.replace(/[^0-9.-]+/g, "")) || 0;

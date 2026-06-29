@@ -8,10 +8,12 @@ const InfluencerListing = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
   useEffect(() => {
     const fetchCreators = async () => {
       try {
-        const res = await fetch("http://localhost:4000/api/creator/list");
+        const res = await fetch(`${backendUrl}/api/creator/list`);
         const data = await res.json();
         if (data.success) {
           setCreators(data.profiles);

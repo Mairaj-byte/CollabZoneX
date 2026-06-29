@@ -48,9 +48,11 @@ const BrandDash = () => {
     },
   ];
 
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
   const handleAdvancePayment = async (campaignId, amount) => {
     try {
-      const res = await fetch("http://localhost:4000/api/payment/advance/order", {
+      const res = await fetch(`${backendUrl}/api/payment/advance/order`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ campaignId, amount }),
@@ -65,7 +67,7 @@ const BrandDash = () => {
         description: "Advance Payment",
         order_id: data.order.id,
         handler: async function (response) {
-          const verifyRes = await fetch("http://localhost:4000/api/payment/advance/verify", {
+          const verifyRes = await fetch(`${backendUrl}/api/payment/advance/verify`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ ...response, campaignId, amount }),
@@ -93,7 +95,7 @@ const BrandDash = () => {
     if (!userId) return;
     const fetchCampaigns = async () => {
       try {
-        const res = await fetch(`http://localhost:4000/api/campaign/brand/${userId}`);
+        const res = await fetch(`${backendUrl}/api/campaign/brand/${userId}`);
         const data = await res.json();
         setCampaigns(data);
       } catch (error) {

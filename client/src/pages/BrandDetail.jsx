@@ -7,10 +7,12 @@ const BrandDetail = () => {
   const [brand, setBrand] = useState(null);
   const [error, setError] = useState(false);
 
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
   useEffect(() => {
     const fetchBrand = async () => {
       try {
-        const res = await fetch(`http://localhost:4000/api/brand/${id}`);
+        const res = await fetch(`${backendUrl}/api/brand/${id}`);
         const data = await res.json();
         if (data.success) {
           setBrand(data.data);

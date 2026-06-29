@@ -7,10 +7,12 @@ const InProfileDetail = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await fetch(`http://localhost:4000/api/creator/${id}`);
+        const res = await fetch(`${backendUrl}/api/creator/${id}`);
         const data = await res.json();
         if (data.success) {
           setProfile(data.profile);
