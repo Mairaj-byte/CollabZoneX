@@ -52,7 +52,7 @@ const AccountSetting = () => {
 
       try {
         if (identity === "brand") {
-          const res = await fetch("backendUrl/api/brand/me", {
+          const res = await fetch("${backendUrl}/api/brand/me", {
             headers: { Authorization: `Bearer ${token}` },
           });
           const data = await res.json();
@@ -69,7 +69,7 @@ const AccountSetting = () => {
           }
         } else {
           
-          const res = await fetch("backendUrl/api/creator/me", {
+          const res = await fetch("${backendUrl}/api/creator/me", {
             headers: { Authorization: `Bearer ${token}` },
           });
           

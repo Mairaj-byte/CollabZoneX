@@ -10,10 +10,12 @@ const BrandListing = () => {
   const [sortOrder, setSortOrder] = useState(""); 
   const navigate = useNavigate();
 
+  const backendUrl = import.meta.env.BACKEND_URL;
+
   useEffect(() => {
     const fetchBrands = async () => {
       try {
-        const res = await fetch("http://localhost:4000/api/brand/list");
+        const res = await fetch("${backendUrl}/api/brand/list");
         const brand = await res.json();
         if (brand.success) {
           setBrands(brand.data);
