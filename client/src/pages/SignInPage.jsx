@@ -6,7 +6,7 @@ import { ShopContext } from "../context/ShopContext";
 import { Mail, Lock, User, Eye, EyeOff, Briefcase, User2, KeyRound, Sparkles, ArrowRight } from "lucide-react";
 
 const SignInPage = () => {
-  const [currentState, setCurrentState] = useState("Login"); // "Login" | "Sign Up" | "Forgot Password"
+  const [currentState, setCurrentState] = useState("Login"); 
   const [showPassword, setShowPassword] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -15,7 +15,7 @@ const SignInPage = () => {
     name: "",
     email: "",
     password: "",
-    identity: "brand", // defaults to brand
+    identity: "brand", 
     otp: "",
     newPassword: ""
   });
@@ -110,9 +110,9 @@ const SignInPage = () => {
   return (
     <div className="min-h-screen grid lg:grid-cols-12 bg-slate-950 font-sans text-slate-100 overflow-x-hidden">
       
-      {/* UNIQUE MARKETING / BRANDING SIDE PANEL */}
+     
       <div className="hidden lg:flex lg:col-span-5 relative bg-gradient-to-tr from-violet-900 via-indigo-950 to-slate-950 p-12 flex-col justify-between overflow-hidden border-r border-slate-800">
-        {/* Glow Effects */}
+      
         <div className="absolute top-1/4 -left-20 w-80 h-80 bg-purple-500/20 rounded-full blur-[120px]" />
         <div className="absolute bottom-1/4 -right-20 w-80 h-80 bg-blue-500/20 rounded-full blur-[120px]" />
 
@@ -140,11 +140,11 @@ const SignInPage = () => {
             {currentState === "Forgot Password" && "Securing your digital workspace is our absolute top priority."}
           </p>
 
-          {/* Interactive Micro-Card */}
+          
           <div className="pt-6">
             <div className="p-4 bg-slate-900/60 backdrop-blur-xl border border-slate-800 rounded-2xl flex items-center gap-4 shadow-2xl max-w-sm transform hover:scale-[1.02] transition-all duration-300">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-violet-500 flex items-center justify-center font-bold text-white shadow-lg">
-                🚀
+                
               </div>
               <div>
                 <p className="text-xs text-slate-500 font-semibold tracking-wider uppercase">Live Platform Activity</p>
@@ -159,11 +159,11 @@ const SignInPage = () => {
         </p>
       </div>
 
-      {/* COMPACT & GORGEOUS FORM SIDE PANEL */}
+      
       <div className="lg:col-span-7 flex items-center justify-center p-6 md:p-12 bg-slate-950">
         <div className="w-full max-w-md space-y-8">
           
-          {/* Form Header */}
+          
           <div className="space-y-2">
             <h2 className="text-3xl font-extrabold tracking-tight text-white">
               {currentState === "Login" && "Welcome Back"}
@@ -177,7 +177,7 @@ const SignInPage = () => {
             </p>
           </div>
 
-          {/* State Switcher (Tabs) */}
+          
           {currentState !== "Forgot Password" && (
             <div className="grid grid-cols-2 p-1 bg-slate-900 rounded-xl border border-slate-800/80">
               <button
@@ -205,7 +205,7 @@ const SignInPage = () => {
             </div>
           )}
 
-          {/* Functional Input Form */}
+          
           <form onSubmit={onSubmitHandler} className="space-y-5">
             {currentState === "Sign Up" && (
               <div className="relative group">
@@ -286,7 +286,7 @@ const SignInPage = () => {
               </div>
             )}
 
-            {/* IDENTITY SYSTEM RADIOS */}
+          
             {currentState === "Sign Up" && (
               <div className="space-y-2">
                 <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Select Profile Alignment</label>

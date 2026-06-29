@@ -20,7 +20,7 @@ export const LegalPage = () => {
 
   return (
     <div className="pt-24 pb-16 bg-white min-h-screen">
-      {/* --- Header Section --- */}
+      
       <section className="px-6 lg:px-12 py-12 max-w-7xl mx-auto text-center">
         <h2 className="text-blue-600 font-bold tracking-wide uppercase text-sm mb-3">Legal Center</h2>
         <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6">
@@ -31,7 +31,7 @@ export const LegalPage = () => {
         </p>
       </section>
 
-      {/* --- Tab Navigation --- */}
+     
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="flex border-b border-gray-100 mb-12">
           <TabButton id="privacy" label="Privacy Policy" icon={Shield} />
@@ -39,7 +39,7 @@ export const LegalPage = () => {
         </div>
 
         <div className="grid lg:grid-cols-4 gap-12">
-          {/* Quick Links / Sidebar */}
+          
           <aside className="hidden lg:block space-y-6">
             <div className="p-6 bg-gray-50 rounded-2xl border border-gray-100">
               <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
@@ -54,7 +54,7 @@ export const LegalPage = () => {
             </div>
           </aside>
 
-          {/* Main Content Area */}
+          
           <div className="lg:col-span-3 prose prose-blue max-w-none text-gray-600">
             {activeTab === 'privacy' ? (
               <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -128,7 +128,7 @@ export const LegalPage = () => {
         </div>
       </div>
 
-      {/* --- Footer CTA --- */}
+     
       <section className="px-6 lg:px-12 max-w-7xl mx-auto mt-20">
         <div className="bg-gray-50 border border-gray-100 rounded-3xl p-8 md:p-12 text-center">
           <h3 className="text-2xl font-bold text-gray-900 mb-4">Still have questions?</h3>

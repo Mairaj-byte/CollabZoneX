@@ -25,6 +25,7 @@ import { LegalPage } from "./pages/LegalPage";
 
 // Components
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import ProtectedRoute from "./pages/ProtectedRoute";
 
 // Toast
@@ -37,7 +38,7 @@ import ResetPassword from "./components/ResetPassword";
 const App = () => {
   const location = useLocation();
 
-  // Hide Navbar & Footer on specific routes
+ 
   const hideLayoutRoutes = ["/signinpage"];
   const hideLayout = hideLayoutRoutes.includes(location.pathname);
 
@@ -95,8 +96,10 @@ const App = () => {
         <Route path="/createcampaign/:id" element={<CreateCampaign />} />
 
       </Routes>
+      {/* Footer */}
 
 
+          
       <ToastContainer
         position="bottom-right"
         autoClose={2500}

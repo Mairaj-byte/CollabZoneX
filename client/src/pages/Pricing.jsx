@@ -36,10 +36,10 @@ export const Pricing = () => {
 
   return (
     <div className="pt-24 pb-20 bg-gray-50 min-h-screen">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 ">
         
-        {/* --- Header --- */}
-        <div className="text-center mb-16">
+       
+        <div className="text-center mb-16 mt-8">
           <h2 className="text-blue-600 font-bold uppercase tracking-widest text-sm mb-3">Pricing Plans</h2>
           <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6">
             Ready to grow your <span className="text-blue-600">influence?</span>
@@ -49,7 +49,6 @@ export const Pricing = () => {
             Creators can join for free!
           </p>
 
-          {/* Toggle */}
           <div className="mt-10 flex items-center justify-center gap-4">
             <span className={`text-sm font-medium ${!isAnnual ? 'text-gray-900' : 'text-gray-500'}`}>Monthly</span>
             <button 
@@ -64,7 +63,7 @@ export const Pricing = () => {
           </div>
         </div>
 
-        {/* --- Pricing Cards --- */}
+        
         <div className="grid md:grid-cols-3 gap-8">
           {plans.map((plan, index) => (
             <div 

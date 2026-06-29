@@ -27,11 +27,11 @@ const brandSchema = new mongoose.Schema(
     },
 
     logo: {
-      type: String, // Cloudinary image URL
+      type: String, 
     },
 
     budgetRange: {
-      type: String, // Example: "10k-50k"
+      type: String, 
     },
   },
   { timestamps: true }

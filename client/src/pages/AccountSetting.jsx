@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShopContext } from '../context/ShopContext';
 import { User, Lock, CreditCard, Bell, Briefcase, Camera, LogOut, Mail, X } from 'lucide-react';
-// import ResetPassword from "../components/ResetPassword"; // Keep if you use it
 
 const AccountSetting = () => {
   const navigate = useNavigate();
@@ -15,7 +14,7 @@ const AccountSetting = () => {
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
   const [showResetModal, setShowResetModal] = useState(false);
 
-  // 🔹 Combined Form State (Handles both Brand and Creator fields)
+
   const [formData, setFormData] = useState({
     // Common fields
     name: '',
@@ -27,7 +26,7 @@ const AccountSetting = () => {
     website: '',
     budgetRange: '',
     
-    // Creator specific fields (Merged from InfluProfileSetup)
+    // Creator specific fields
     username: '',
     bio: '',
     niche: '',
@@ -40,12 +39,11 @@ const AccountSetting = () => {
   });
 
   // API states
-  const [profileImage, setProfileImage] = useState(null); // Used for both Brand Logo & Creator Profile Pic
+  const [profileImage, setProfileImage] = useState(null); 
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  // 🔹 Fetch existing profile
   useEffect(() => {
     const fetchProfile = async () => {
       if (!token) return;
@@ -68,14 +66,14 @@ const AccountSetting = () => {
             if (data.data.logo) setPreview(data.data.logo);
           }
         } else {
-          // 🔹 Creator Profile Fetch (Merged from InfluProfileSetup)
+          
           const res = await fetch("http://localhost:4000/api/creator/me", {
             headers: { Authorization: `Bearer ${token}` },
           });
           
-          // Using fetch instead of axios, so we extract JSON first
+          
           const data = await res.json();
-          // Handle API response structure (either wrapped in data or direct)
+          
           const creatorData = data.data || data; 
 
           if (creatorData) {
@@ -117,7 +115,7 @@ const AccountSetting = () => {
     }
   };
 
-  // 🔹 Submit Form
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -146,7 +144,6 @@ const AccountSetting = () => {
         }
 
       } else {
-        // 🔹 Creator Profile Submit (Merged from InfluProfileSetup)
         const form = new FormData();
         form.append("username", formData.username);
         form.append("bio", formData.bio);
@@ -188,7 +185,7 @@ const AccountSetting = () => {
     navigate('/signinpage');
   };
 
-  // --- RENDER MAIN CONTENT ---
+  
   const renderTabContent = () => {
     switch (activeTab) {
       case 'profile':
@@ -218,7 +215,7 @@ const AccountSetting = () => {
                 </div>
               </div>
 
-              {/* Identity Logic Applied Here */}
+              {/* Identity Logic  */}
               {identity === 'brand' ? (
                 <>
                   <div className="flex flex-col sm:flex-row gap-4">
@@ -250,9 +247,7 @@ const AccountSetting = () => {
                   </div>
                 </>
               ) : (
-                /* ========================================= */
-                /* CREATOR SPECIFIC FIELDS (Merged Layout)   */
-                /* ========================================= */
+                
                 <>
                   <div className="flex flex-col sm:flex-row gap-4">
                     <div className="w-full">
@@ -305,7 +300,7 @@ const AccountSetting = () => {
                 </>
               )}
 
-              {/* Image Upload Section (Unified for both Brand and Creator) */}
+              {/* Image Upload Section */}
               <div className="pt-2">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   {identity === 'brand' ? 'Brand Logo' : 'Profile Picture'}
@@ -376,7 +371,7 @@ const AccountSetting = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-80px)] bg-gray-900  relative overflow-y-auto scrollbar-hide">
+    <div className="min-h-[calc(100vh-80px)] bg-gray-900  relative overflow-y-auto scrollbar-hide mt-25">
       <div className=" min-h-[calc(100vh-80px)] max-w-full mx-auto bg-white  shadow-lg overflow-hidden flex flex-col md:flex-row ">
         
         {/* SIDEBAR NAVIGATION */}
@@ -417,41 +412,123 @@ const AccountSetting = () => {
         </main>
       </div>
 
-      {/* ========================================= */}
-      {/* MODALS WITH BLURRED BACKGROUND */}
-      {/* ========================================= */}
+    
 
       {/* 1. Change Password Modal */}
-      {isPasswordModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden animate-slideUp relative">
-            <button onClick={() => setIsPasswordModalOpen(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-700">
-              <X size={24} />
-            </button>
-            <div className="p-6 md:p-8">
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">Change Password</h2>
-              <p className="text-sm text-gray-500 mb-6">Ensure your account is using a long, random password to stay secure.</p>
-              <form onSubmit={(e) => { e.preventDefault(); alert("Password updated"); setIsPasswordModalOpen(false); }} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
-                  <input type="password" required className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">New Password</label>
-                  <input type="password" required className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
-                  <input type="password" required className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" />
-                </div>
-                <button type="submit" className="w-full mt-4 p-3 bg-gray-900 text-white font-semibold rounded-lg hover:bg-black transition">
-                  Update Password
-                </button>
-              </form>
+{isPasswordModalOpen && (
+  <div 
+    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200"
+    onClick={() => setIsPasswordModalOpen(false)}
+  >
+    <div 
+      className="bg-white/95 border border-slate-200/60 backdrop-blur-md rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200 relative"
+      onClick={(e) => e.stopPropagation()}
+    >
+      {/* Close Button */}
+      <button 
+        onClick={() => setIsPasswordModalOpen(false)} 
+        className="absolute top-5 right-5 p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors duration-200 focus:outline-none"
+      >
+        <X size={18} />
+      </button>
+
+      <div className="p-6 md:p-8">
+        {/* Header Section */}
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 bg-clip-text text-transparent">
+            Change Password
+          </h2>
+          <p className="text-xs text-slate-500 mt-1.5">
+            Ensure your account is using a secure, complex password to stay fully protected.
+          </p>
+        </div>
+
+        {/* Form Container */}
+        <form 
+          onSubmit={(e) => { 
+            e.preventDefault(); 
+            alert("Password updated"); 
+            setIsPasswordModalOpen(false); 
+          }} 
+          className="space-y-4"
+        >
+          {/* Current Password Field */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">
+              Current Password
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                <Lock size={18} />
+              </div>
+              <input 
+                type="password" 
+                required 
+                placeholder="••••••••"
+                className="w-full pl-11 pr-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 transition-all duration-200" 
+              />
             </div>
           </div>
-        </div>
-      )}
+
+          {/* New Password Field */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">
+              New Password
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                <Lock size={18} />
+              </div>
+              <input 
+                type="password" 
+                required 
+                placeholder="Minimum 6 characters"
+                className="w-full pl-11 pr-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 transition-all duration-200" 
+              />
+            </div>
+          </div>
+
+          {/* Confirm New Password Field */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">
+              Confirm New Password
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                <Lock size={18} />
+              </div>
+              <input 
+                type="password" 
+                required 
+                placeholder="••••••••"
+                className="w-full pl-11 pr-4 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 transition-all duration-200" 
+              />
+            </div>
+          </div>
+
+          {/* Submit Action Buttons */}
+          <div className="pt-2 flex flex-col gap-2">
+            <button 
+              type="submit" 
+              className="w-full relative group overflow-hidden py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold text-sm rounded-xl shadow-md shadow-blue-500/10 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-200"
+            >
+              <span className="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
+              Update Password
+            </button>
+            
+            <button
+              type="button"
+              onClick={() => setIsPasswordModalOpen(false)}
+              className="w-full py-2.5 text-xs font-semibold text-slate-500 hover:text-slate-800 bg-slate-50 hover:bg-slate-100/80 border border-slate-200/60 rounded-xl transition-all duration-200"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+)}
 
       {/* 2. Verify Email Modal */}
       {isEmailModalOpen && (

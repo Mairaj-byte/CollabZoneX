@@ -47,11 +47,11 @@ const campaignSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: [
-        "requested",          // waiting creator accept/reject
-        "accepted",         // creator accepted
-        "rejected",         // creator rejected
-        "advance_pending",  // waiting advance payment
-        "advance_paid",     // advance completed
+        "requested",         
+        "accepted",         
+        "rejected",         
+        "advance_pending",  
+        "advance_paid",     
         "completed"
       ],
       default: "requested",

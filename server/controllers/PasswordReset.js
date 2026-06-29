@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import userModel from '../models/userModel.js';
 import transporter from '../config/nodeMailer.js';
 
-// ================= SEND RESET OTP =================
+
 export const sendResetOtp = async (req, res) => {
     const { email } = req.body;
 
@@ -62,7 +62,7 @@ CollabZoneX Team`
 };
 
 
-// ================= RESET PASSWORD =================
+
 export const resetPassword = async (req, res) => {
     const { email, otp, newPassword } = req.body;
 

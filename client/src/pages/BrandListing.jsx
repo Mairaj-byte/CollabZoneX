@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronDown, Filter, ArrowUpRight } from "lucide-react";
+import { ChevronDown, Filter, ArrowUpRight, Wallet, Briefcase } from "lucide-react";
+import Footer from "../components/Footer";
 
 const BrandListing = () => {
   const [brands, setBrands] = useState([]);
   const [filteredBrands, setFilteredBrands] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [sortOrder, setSortOrder] = useState(""); // "" | "low-high" | "high-low"
+  const [sortOrder, setSortOrder] = useState(""); 
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,46 +44,52 @@ const BrandListing = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen bg-[#f8fafc]">
-        <div className="relative w-12 h-12">
-          <div className="absolute w-full h-full border-4 border-blue-100 rounded-full"></div>
-          <div className="absolute w-full h-full border-4 border-blue-600 rounded-full animate-spin border-t-transparent"></div>
+      <div className="flex flex-col justify-center items-center h-screen bg-[#FAF9F6] space-y-4">
+        <div className="relative w-14 h-14">
+          <div className="absolute inset-0 rounded-full border-4 border-blue-50"></div>
+          <div className="absolute inset-0 rounded-full border-4 border-indigo-600 border-t-transparent animate-spin"></div>
         </div>
+        <p className="text-indigo-900/60 font-semibold text-sm tracking-wide animate-pulse">Syncing campaign boards...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] px-4 sm:px-8 py-12 mt-16">
+    <div className="min-h-screen bg-gradient-to-b from-[#FAF9F6] via-white to-blue-50/30 px-4 py-12 sm:px-6 md:px-8 lg:py-20 pt-28 relative">
       
-      {/* Header & Filter Section */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-10 max-w-7xl mx-auto">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-            Partner Brands
-          </h1>
-          <p className="text-slate-400 mt-1 text-sm sm:text-base">
-            Discover {brands.length} industry leaders ready to collaborate.
-          </p>
-        </div>
+      <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#4f46e5_1px,transparent_1px),linear-gradient(to_bottom,#4f46e5_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none"></div>
+      
+      
+      <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[500px] h-[250px] bg-gradient-to-r from-blue-300/10 to-indigo-400/10 blur-[80px] rounded-full pointer-events-none"></div>
 
-        {/* Custom Pill-Style Sort Dropdown Container */}
-        <div className="relative inline-block text-left">
-          <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-slate-200/60 shadow-sm">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1 pl-1">
-              <Filter size={12} className="text-slate-400" /> Sort:
-            </span>
+    
+      <div className="text-center max-w-3xl mx-auto mb-16 relative z-10 mt-15">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-600 text-white text-[10px] font-black tracking-widest uppercase mb-4 shadow-md shadow-indigo-600/10">
+          <Briefcase size={10} /> Live Campaigns
+        </div>
+        <h1 className="text-4xl sm:text-6xl font-black text-indigo-950 tracking-tight leading-none">
+          Partner <span className=" decoration-2 underline-offset-4">Brands</span>
+        </h1>
+        <p className="text-slate-600 mt-5 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+          Connect directly with {brands.length} market leaders scouting for fresh influencer distributions.
+        </p>
+
+        
+        <div className="mt-8 flex justify-center">
+          <div className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-xl border border-indigo-100 shadow-sm transition-all hover:border-indigo-200">
+            <Filter size={12} className="text-indigo-400" />
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider hidden xs:inline">Sort Layout:</span>
             <div className="relative flex items-center">
               <select
                 value={sortOrder}
                 onChange={(e) => handleSort(e.target.value)}
-                className="appearance-none bg-transparent text-slate-700 text-sm py-1 pl-1 pr-7 font-semibold focus:outline-none cursor-pointer hover:text-blue-600 transition-colors"
+                className="appearance-none bg-transparent text-indigo-950 text-xs py-0.5 pl-1 pr-6 font-bold focus:outline-none cursor-pointer hover:text-blue-600 transition-colors"
               >
-                <option value="">Featured</option>
+                <option value="">Featured Opportunities</option>
                 <option value="low-high">Budget: Low → High</option>
                 <option value="high-low">Budget: High → Low</option>
               </select>
-              <div className="pointer-events-none absolute right-1 text-slate-400">
+              <div className="pointer-events-none absolute right-0 text-indigo-400">
                 <ChevronDown size={14} />
               </div>
             </div>
@@ -90,72 +97,80 @@ const BrandListing = () => {
         </div>
       </div>
 
-      {/* Grid Layout forced into dynamic 4 columns on large viewport breaklines */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 max-w-7xl mx-auto">
+      
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mb-24 relative z-10">
         {filteredBrands.map((brand) => (
           <div
             key={brand._id}
             onClick={() => navigate(`/brand/${brand._id}`)}
-            className="group bg-white border border-slate-100 rounded-xl overflow-hidden hover:shadow-[0_20px_50px_rgba(59,_130,_246,_0.08)] transition-all duration-300 cursor-pointer flex flex-col transform hover:-translate-y-1"
+            className="group relative flex flex-col justify-between overflow-hidden bg-white border border-indigo-50 rounded-2xl shadow-sm hover:shadow-xl hover:shadow-indigo-100/40 transition-all duration-300 cursor-pointer transform hover:-translate-y-1"
           >
-            {/* Image / Logo Cover container (Slightly smaller height) */}
-            <div className="relative h-28 sm:h-36 bg-gradient-to-br from-slate-50 to-slate-100/50 flex items-center justify-center overflow-hidden border-b border-slate-100">
-              {brand.logo && brand.logo.startsWith("http") ? (
-                <img
-                  src={brand.logo}
-                  alt={brand.brandName}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              ) : (
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-black text-xl shadow-md">
-                  {brand.brandName.charAt(0)}
-                </div>
-              )}
-              
-              {/* Premium Frosted Floating Industry Tag */}
-              <div className="absolute top-2.5 right-2.5">
-                <span className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md text-[10px] font-bold text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-md shadow-sm border border-slate-200/40">
-                  {brand.industry}
-                </span>
-              </div>
-            </div>
-
-            {/* Tightened Content Info Matrix */}
-            <div className="p-4 flex-grow flex flex-col justify-between bg-white">
-              <div>
-                <h2 className="text-base font-bold text-slate-800 line-clamp-1 group-hover:text-blue-600 transition-colors tracking-tight">
-                  {brand.brandName}
-                </h2>
-                <p className="text-[11px] uppercase tracking-wider font-medium text-slate-400 mt-0.5">
-                  {brand.industry}
-                </p>
-              </div>
-              
-              {/* Card Footer: Budget Metric Block */}
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-                <div className="flex flex-col">
-                  <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Est. Budget</span>
-                  <span className="text-sm font-extrabold text-blue-600 tracking-tight mt-0.5">
-                    {brand.budgetRange}
+            <div>
+            
+              <div className="relative h-44 sm:h-56 bg-gradient-to-b from-slate-50 to-white flex items-center justify-center overflow-hidden border-b border-indigo-50/50 p-6 transition-colors group-hover:from-blue-50/40 group-hover:to-indigo-50/20">
+                {brand.logo && brand.logo.startsWith("http") ? (
+                  <img
+                    src={brand.logo}
+                    alt={brand.brandName}
+                    className="max-w-[90%] max-h-[85%] object-contain filter drop-shadow-sm group-hover:scale-105 transition-transform duration-500"
+                  />
+                ) : (
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white font-black text-2xl sm:text-3xl shadow-md shadow-indigo-600/20 group-hover:scale-105 transition-transform duration-500">
+                    {brand.brandName ? brand.brandName.charAt(0) : "B"}
+                  </div>
+                )}
+                
+                
+                <div className="absolute top-3 right-3 max-w-[80%]">
+                  <span className="bg-indigo-600 text-white text-[9px] font-black px-2.5 py-1 rounded-md shadow-sm block truncate tracking-widest uppercase">
+                    {brand.industry || "Market"}
                   </span>
                 </div>
-                
-                {/* Clean Micro-arrow pointer effect */}
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-50 text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
-                  <ArrowUpRight size={14} className="transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </div>
+
+              
+              <div className="p-5">
+                <h2 className="text-base font-black text-indigo-950 line-clamp-1 group-hover:text-blue-600 transition-colors tracking-tight">
+                  {brand.brandName}
+                </h2>
+                <p className="text-[10px] uppercase tracking-widest font-bold text-indigo-400/70 mt-1">
+                  {brand.industry || "Enterprise"}
+                </p>
+              </div>
+            </div>
+            
+            
+            <div className="mx-5 mb-5 pt-4 border-t border-indigo-50/80 flex items-center justify-between gap-1">
+              <div className="min-w-0 flex items-center gap-2">
+                <div className="p-1.5 rounded-xl bg-blue-50 text-blue-600 hidden xs:block">
+                  <Wallet size={12} />
                 </div>
+                <div className="min-w-0">
+                  <span className="text-[9px] text-slate-400 uppercase font-bold tracking-wider block">Allocation</span>
+                  <span className="text-xs sm:text-sm font-black text-indigo-600 truncate block">
+                    {brand.budgetRange || "Flexible"}
+                  </span>
+                </div>
+              </div>
+              
+              
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-indigo-50 text-indigo-500 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300 flex-shrink-0 shadow-sm">
+                <ArrowUpRight size={14} className="transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Empty Fallback State Container */}
+      
       {filteredBrands.length === 0 && (
-        <div className="text-center py-24 max-w-7xl mx-auto bg-white border border-dashed border-slate-200 rounded-2xl mt-4">
-          <p className="text-slate-400 text-base font-medium">No brands found matching your criteria.</p>
+        <div className="text-center py-24 max-w-7xl mx-auto bg-indigo-50/20 border border-dashed border-indigo-100 rounded-3xl mt-6 mb-24">
+          <p className="text-indigo-900/50 text-base font-medium">No open brand mandates found.</p>
         </div>
       )}
+
+      
+      <Footer />
     </div>
   );
 };

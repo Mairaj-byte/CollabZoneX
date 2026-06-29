@@ -60,7 +60,7 @@ const InProfileDetail = () => {
       <div className="fixed top-0 right-0 -z-10 w-1/2 h-1/2 bg-blue-50 blur-[120px] rounded-full opacity-50"></div>
 
       <div className="max-w-6xl mx-auto">
-        {/* Back Button */}
+        
         <button 
           onClick={() => navigate(-1)}
           className="group flex items-center gap-2 text-slate-500 hover:text-blue-600 transition-colors mb-8 font-medium"

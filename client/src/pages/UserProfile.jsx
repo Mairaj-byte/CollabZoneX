@@ -7,7 +7,7 @@ import {
   Youtube, Globe, Calendar, FolderOpen
 } from 'lucide-react';
 
-// --- Reusable SVG Components ---
+
 const DefaultBanner = () => (
   <svg viewBox="0 0 800 200" className="w-full h-full object-cover" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
     <defs>
@@ -49,7 +49,7 @@ const MyProfile = () => {
       try {
         let data = {};
 
-        // 🔹 1. Fetch based on identity
+        
         if (identity === "brand") {
           const res = await fetch("http://localhost:4000/api/brand/me", {
             headers: { Authorization: `Bearer ${token}` },
@@ -62,11 +62,10 @@ const MyProfile = () => {
             headers: { Authorization: `Bearer ${token}` },
           });
           const json = await res.json();
-          // Handle standard express responses where data might be nested or direct
           data = json.data || json;
         }
 
-        // 🔹 2. Map data dynamically based on the user type
+        
         setProfile({
           name: identity === 'brand' ? (data.brandName || "Innovate Corp.") : (data.username || "Creator User"),
           username: identity === 'brand' ? "@innovatecorp" : `@${data.username || "creator"}`,
@@ -87,7 +86,6 @@ const MyProfile = () => {
             ? ["Cloud", "AI", "B2B", "SaaS"]
             : (data.niche ? [data.niche, "Digital Creator", "CollabZonex"] : ["Video", "SEO", "Tech"]),
 
-          // Mock data for portfolio and reviews (unless your API returns these arrays)
           portfolio: [
             { id: 1, title: identity === 'brand' ? "FinTech Launch" : "Tech Campaign", category: "Video Review", image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&q=80" },
             { id: 2, title: identity === 'brand' ? "SaaS Scaling" : "Beauty Collab", category: "Case Study", image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&q=80" },
@@ -115,22 +113,25 @@ const MyProfile = () => {
     );
   }
 
-  // Safely extract initials to prevent crashes if name is somehow empty
   const initials = profile.name ? profile.name.substring(0, 2).toUpperCase() : "US";
-  return (
-    <>
-      {/* PROFILE CONTENT */}
-      < div className="bg-[#F8FAFC]  overflow-y-auto scrollbar-hide pb-12 shadow-inner" >
 
-        {/* Header Banner & Avatar */}
-        < div className="bg-white border-b border-gray-200" >
-          <div className="h-30 md:h-40 w-full relative bg-gray-600">
+  return (
+    <div className="min-h-screen bg-slate-50/50 pb-12 pt-16">
+      
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm">
+          
+          
+          <div className="h-36 sm:h-48 md:h-60 w-full relative bg-slate-800">
             <DefaultBanner />
           </div>
 
-          <div className="px-6 sm:px-10 pb-8 relative">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end -mt-16 sm:-mt-20 mb-4 gap-4">
-
+          
+          <div className="px-4 sm:px-8 pb-6 relative">
+            <div className="flex flex-col sm:flex-row justify-between items-center sm:items-end -mt-14 sm:-mt-20 mb-6 gap-4 text-center sm:text-left">
+              
+              {/* Profile Avatar */}
               <div className="relative h-28 w-28 sm:h-36 sm:w-36 rounded-full border-4 border-white bg-white shadow-md overflow-hidden shrink-0">
                 {profile.avatar ? (
                   <img src={profile.avatar} alt="Profile" className="w-full h-full object-cover" />
@@ -139,8 +140,10 @@ const MyProfile = () => {
                 )}
               </div>
 
-              <div className="flex gap-3 w-full sm:w-auto">
-                <button className="flex-1 sm:flex-none px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition shadow-sm"
+              
+              <div className="w-full sm:w-auto">
+                <button 
+                  className="w-full sm:w-auto px-6 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition duration-150 shadow-sm"
                   onClick={() => navigate('/Account_Setting')}
                 >
                   Edit Profile
@@ -148,67 +151,83 @@ const MyProfile = () => {
               </div>
             </div>
 
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">{profile.name}</h1>
-              <p className="text-lg text-gray-600 font-medium mt-1">
-                {profile.username} <span className="mx-2 text-gray-300">|</span> {profile.title}
+            
+            <div className="text-center sm:text-left">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">{profile.name}</h1>
+              <p className="text-sm sm:text-base text-gray-600 font-medium mt-1.5 flex flex-wrap justify-center sm:justify-start items-center gap-2">
+                <span>{profile.username}</span>
+                <span className="text-gray-300 hidden sm:inline">|</span> 
+                <span className="text-gray-500 font-normal">{profile.title}</span>
               </p>
-              <div className="flex flex-wrap items-center gap-y-2 gap-x-6 mt-4 text-sm text-gray-500 font-medium">
-                <div className="flex items-center gap-1.5"><MapPin size={16} /> {profile.location}</div>
-                <div className="flex items-center gap-1.5 text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md">
-                  <Star size={16} /> {profile.stats}
+              
+              <div className="flex flex-wrap justify-center sm:justify-start items-center gap-3 mt-4 text-xs sm:text-sm font-semibold">
+                <div className="flex items-center gap-1.5 text-gray-500 bg-gray-100 px-3 py-1.5 rounded-lg">
+                  <MapPin size={15} className="text-gray-400" /> {profile.location}
+                </div>
+                <div className="flex items-center gap-1.5 text-blue-700 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-100">
+                  <Star size={15} className="text-blue-500 fill-blue-500" /> {profile.stats}
                 </div>
               </div>
             </div>
+
           </div>
-        </div >
+        </div>
+      </div>
 
-        {/* Main Grid */}
-        < div className="px-6 sm:px-10 mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6" >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-          {/* Left Sidebar */}
-          < div className="space-y-6" >
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">About</h3>
+          
+          <div className="space-y-6 lg:col-span-1">
+            
+          
+            <div className="bg-white p-5 sm:p-6 rounded-2xl border border-gray-200 shadow-sm">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-3">About</h3>
               <p className="text-gray-600 text-sm leading-relaxed">{profile.bio}</p>
             </div>
 
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">Skills & Focus</h3>
+            <div className="bg-white p-5 sm:p-6 rounded-2xl border border-gray-200 shadow-sm">
+              <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-4">Skills & Focus</h3>
               <div className="flex flex-wrap gap-2">
                 {profile.tags.map((tag, index) => (
-                  <span key={index} className="px-3 py-1.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg">
+                  <span key={index} className="px-3 py-1.5 bg-slate-50 border border-slate-100 text-gray-700 text-xs sm:text-sm font-medium rounded-lg">
                     {tag}
                   </span>
                 ))}
               </div>
             </div>
-          </div >
 
-          {/* Right Main Content */}
-          < div className="lg:col-span-2 space-y-6" >
-            <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-200">
-              <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2 mb-6">
-                <FolderOpen size={24} className="text-blue-600" /> Portfolio & Work
+          </div>
+
+          
+          <div className="lg:col-span-2 space-y-6">
+            <div className="bg-white p-5 sm:p-6 md:p-8 rounded-2xl border border-gray-200 shadow-sm">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 flex items-center gap-2 mb-6 border-b border-gray-100 pb-3">
+                <FolderOpen size={22} className="text-blue-600" /> Portfolio & Work
               </h3>
+              
+              
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 {profile.portfolio.map((item) => (
-                  <div key={item.id} className="rounded-xl overflow-hidden border border-gray-200">
-                    <div className="h-40 w-full"><img src={item.image} alt={item.title} className="w-full h-full object-cover" /></div>
-                    <div className="p-4 bg-white">
-                      <p className="text-xs font-bold text-blue-600 uppercase mb-1">{item.category}</p>
-                      <h4 className="font-bold text-gray-900">{item.title}</h4>
+                  <div key={item.id} className="rounded-xl overflow-hidden border border-gray-200 shadow-sm flex flex-col hover:shadow-md transition duration-200">
+                    <div className="h-40 sm:h-44 w-full bg-slate-100">
+                      <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                    </div>
+                    <div className="p-4 bg-white flex-grow flex flex-col justify-center">
+                      <p className="text-[11px] font-bold text-blue-600 uppercase tracking-wider mb-1">{item.category}</p>
+                      <h4 className="font-bold text-gray-900 text-sm sm:text-base">{item.title}</h4>
                     </div>
                   </div>
                 ))}
               </div>
+
             </div>
-          </div >
+          </div>
 
-        </div >
-      </div >
+        </div>
+      </div>
 
-    </>
+    </div>
   );
 };
 

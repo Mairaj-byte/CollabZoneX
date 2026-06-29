@@ -13,7 +13,7 @@ const profileSchema = new mongoose.Schema(
     niche: String,
 
     profileImage: {
-      type: String // Cloudinary image URL
+      type: String 
     },
 
     socialLinks: {

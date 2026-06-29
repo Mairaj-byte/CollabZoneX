@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Users, TrendingUp, MapPin, ArrowUpRight } from "lucide-react";
+import Footer from "../components/Footer";
 
 const InfluencerListing = () => {
   const [creators, setCreators] = useState([]);
@@ -25,45 +27,58 @@ const InfluencerListing = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col justify-center items-center h-screen space-y-4">
-        <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-gray-500 font-medium animate-pulse">Curating top creators...</p>
+      <div className="flex flex-col justify-center items-center h-screen space-y-4 bg-[#FAF9F6]">
+        <div className="relative w-16 h-16">
+          <div className="absolute inset-0 rounded-full border-4 border-indigo-50"></div>
+          <div className="absolute inset-0 rounded-full border-4 border-indigo-600 border-t-transparent animate-spin"></div>
+        </div>
+        <p className="text-indigo-900/60 font-semibold tracking-wide animate-pulse text-sm">
+          Assembling top creators...
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] px-6 py-15">
-      <div className="max-w-[1600px] mx-auto">
-        {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-          <div>
-            <h1 className="text-4xl font-bold text-slate-900 tracking-tight">
-              Featured <span className="text-blue-600">Creators</span>
-            </h1>
+    <div className="min-h-screen bg-gradient-to-b from-[#FAF9F6] via-white to-blue-50/30 px-3 py-12 sm:px-6 md:px-8 lg:py-20 pt-28 relative">
+      
+      <div className="absolute inset-0 opacity-[0.02] bg-[linear-gradient(to_right,#4f46e5_1px,transparent_1px),linear-gradient(to_bottom,#4f46e5_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none"></div>
 
-            <div className="overflow-hidden whitespace-nowrap w-full">
-              <p className="inline-block animate-marquee text-slate-500 mt-2 text-lg">
-                Collaborate with the world's most engaging influencers.
-              </p>
-            </div>
+      
+      <div className="absolute top-12 left-1/2 -translate-x-1/2 w-[500px] h-[250px] bg-gradient-to-r from-blue-200/20 to-indigo-300/20 blur-[80px] rounded-full pointer-events-none"></div>
 
+      <div className="max-w-7xl mx-auto relative z-10">
+        
+        
+        <div className="text-center max-w-3xl mx-auto mb-16 px-1 mt-12">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 text-indigo-600 text-xs font-bold mb-4 tracking-wide uppercase shadow-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping"></span>
+            Live Database
           </div>
-          <div className="bg-white px-4 py-2 rounded-full shadow-sm border text-sm font-medium text-slate-600">
-            {creators.length} Creators Available
+          
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-indigo-950 tracking-tight leading-none">
+            Elite <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Creators</span>
+          </h1>
+          
+          <p className="text-slate-600 mt-4 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+            Discover and instantly partner with top-tier creators tailored to your brand identity.
+          </p>
+
+        
+          <div className="mt-6 inline-block bg-white px-4 py-1.5 rounded-xl shadow-sm border border-indigo-50 text-xs sm:text-sm font-semibold text-slate-600">
+            <span className="text-blue-600 font-black">{creators.length}</span> Talents Open for Deals
           </div>
         </div>
 
         {creators.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-slate-300">
-            <p className="text-slate-400 text-lg">No creators found in this category.</p>
+          <div className="text-center py-24 max-w-4xl mx-auto bg-indigo-50/10 border border-dashed border-indigo-100 rounded-3xl mb-24">
+            <p className="text-indigo-900/40 text-base font-medium">No creators found matching your criteria.</p>
           </div>
         ) : (
-          /* 4-Column Grid Logic */
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6">
+          
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 mb-24">
             {creators.map((creator) => {
               const {
-                _id,
                 userId,
                 username,
                 bio,
@@ -73,81 +88,99 @@ const InfluencerListing = () => {
                 location,
                 pricePerPost,
                 profileImage,
-                socialLinks,
               } = creator;
 
               return (
                 <div
                   key={userId}
                   onClick={() => navigate(`/profile/${userId}`)}
-                  className="group relative cursor-pointer bg-white rounded-lg p-5 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-gray-300"
+                  className="group relative flex flex-col justify-between overflow-hidden cursor-pointer bg-white rounded-2xl p-4 sm:p-5 transition-all duration-300 hover:-translate-y-1.5 shadow-sm hover:shadow-xl hover:shadow-indigo-100/40 border border-indigo-50/60"
                 >
-                  {/* Floating Badge */}
-                  <div className="absolute top-4 right-4 z-10">
-                    <span className="bg-white/90 backdrop-blur-md text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full shadow-sm border border-slate-100">
-                      {niche}
-                    </span>
-                  </div>
-
-                  {/* Profile Header */}
-                  <div className="flex flex-col items-center text-center mt-4">
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-blue-500 rounded-full blur-md opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                      <img
-                        src={profileImage || `https://ui-avatars.com/api/?name=${username}&background=6366f1&color=fff`}
-                        alt={username}
-                        className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg relative z-10"
-                      />
+                  <div>
+                   
+                    <div className="flex items-center justify-between gap-1 mb-4">
+                      <span className="bg-blue-50 text-blue-700 text-[9px] sm:text-[10px] uppercase tracking-widest font-extrabold px-2.5 py-1 rounded-lg truncate max-w-[85%] border border-blue-100/30">
+                        {niche || "General"}
+                      </span>
+                      <div className="text-indigo-300 group-hover:text-blue-600 transition-colors hidden sm:block">
+                        <ArrowUpRight size={18} />
+                      </div>
                     </div>
-                    <h2 className="mt-4 text-xl font-bold text-slate-800 group-hover:text-blue-600 transition-colors">
-                      @{username}
-                    </h2>
-                    <p className="text-slate-400 text-xs flex items-center gap-1">
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                      {location}
+
+                    
+                    <div className="flex flex-col items-center text-center">
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-gradient-to-tr from-blue-400 to-indigo-500 rounded-full blur-md opacity-0 group-hover:opacity-20 transition-all duration-300"></div>
+                        <div className="p-0.5 rounded-full bg-indigo-50 group-hover:bg-gradient-to-tr group-hover:from-blue-500 group-hover:to-indigo-500 transition-all duration-300">
+                          <img
+                            src={profileImage || `https://ui-avatars.com/api/?name=${username}&background=4f46e5&color=fff`}
+                            alt={username}
+                            className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover border-2 border-white relative z-10"
+                          />
+                        </div>
+                      </div>
+
+                      <h2 className="mt-3 text-sm sm:text-base font-black text-indigo-950 group-hover:text-blue-600 transition-colors line-clamp-1 w-full px-1 tracking-tight">
+                        @{username}
+                      </h2>
+                      
+                      <p className="text-slate-400 text-[10px] sm:text-xs flex items-center justify-center gap-0.5 mt-0.5 truncate max-w-full">
+                        <MapPin size={11} className="text-indigo-400 flex-shrink-0" />
+                        <span className="truncate">{location || "Remote"}</span>
+                      </p>
+                    </div>
+
+                    
+                    <p className="mt-3 text-[11px] sm:text-xs text-slate-500 text-center line-clamp-2 min-h-[32px] sm:min-h-[40px] px-1 leading-relaxed">
+                      {bio || "Sharing standard lifestyle, art updates, and collaborative masterclasses."}
                     </p>
                   </div>
 
-                  {/* Bio */}
-                  <p className="mt-4 text-sm text-slate-500 line-clamp-2 min-h-[40px]">
-                    {bio || "Passionate creator sharing unique perspectives and daily stories."}
-                  </p>
-
-                  {/* Stats Box */}
-                  <div className="mt-6 grid grid-cols-2 gap-3 p-4 bg-slate-50 rounded-2xl group-hover:bg-blue-50/50 transition-colors">
-                    <div className="text-center">
-                      <p className="text-sm font-bold text-slate-800">
-                        {followersCount >= 1000 ? (followersCount / 1000).toFixed(1) + 'K' : followersCount}
-                      </p>
-                      <p className="text-[10px] text-slate-400 uppercase tracking-tighter">Followers</p>
+                  <div>
+                
+                    <div className="mt-4 grid grid-cols-2 gap-1.5 p-2 bg-gradient-to-b from-slate-50 to-white rounded-xl border border-indigo-50/50">
+                      <div className="flex flex-col items-center justify-center text-center">
+                        <div className="flex items-center gap-1 text-indigo-950">
+                          <Users size={12} className="text-blue-500 flex-shrink-0" />
+                          <span className="text-xs font-black tracking-tight">
+                            {followersCount >= 1000 ? (followersCount / 1000).toFixed(1) + 'K' : followersCount}
+                          </span>
+                        </div>
+                        <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">Audience</span>
+                      </div>
+                      
+                      <div className="flex flex-col items-center justify-center text-center border-l border-indigo-50">
+                        <div className="flex items-center gap-1 text-indigo-950">
+                          <TrendingUp size={12} className="text-indigo-500 flex-shrink-0" />
+                          <span className="text-xs font-black tracking-tight">{engagementRate || "0.0"}%</span>
+                        </div>
+                        <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">Engage</span>
+                      </div>
                     </div>
-                    <div className="text-center border-l border-slate-200">
-                      <p className="text-sm font-bold text-slate-800">{engagementRate}%</p>
-                      <p className="text-[10px] text-slate-400 uppercase tracking-tighter">Engage</p>
+
+                    
+                    <div className="mt-4 pt-3 border-t border-indigo-50 flex items-center justify-between gap-1">
+                      <div className="min-w-0">
+                        <span className="text-[8px] sm:text-[9px] text-slate-400 uppercase font-bold tracking-wider block">Rate Card</span>
+                        <span className="text-xs sm:text-base font-black text-indigo-950 truncate block tracking-tight">
+                          ₹{pricePerPost?.toLocaleString() || "0"}
+                        </span>
+                      </div>
+                      
+                      <button className="bg-indigo-50 hover:bg-indigo-600 text-indigo-600 hover:text-white p-2 sm:p-2.5 rounded-xl transition-all duration-200 flex-shrink-0 border border-indigo-100 group-hover:border-transparent">
+                        <span className="text-[10px] sm:text-xs font-bold px-1 sm:px-2 hidden xs:block">View Deals</span>
+                        <ArrowUpRight size={14} className="xs:hidden" />
+                      </button>
                     </div>
                   </div>
 
-                  {/* Price & Action */}
-                  <div className="mt-6 flex items-center justify-between">
-                    <div>
-                      <p className="text-[10px] text-slate-400 uppercase font-bold">Starts at</p>
-                      <p className="text-lg font-black text-blue-600">₹{pricePerPost}</p>
-                    </div>
-                    <button className="bg-slate-900 text-white p-3 rounded-xl hover:bg-blue-600 transition-colors">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                      </svg>
-                    </button>
-                  </div>
                 </div>
               );
             })}
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 };

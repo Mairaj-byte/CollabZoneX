@@ -59,7 +59,6 @@ export const verifyAdvancePayment = async (req, res) => {
       return res.status(400).json({ message: "Invalid signature" });
     }
 
-    // ✅ 1. Update Payment
     const payment = await Payment.findOneAndUpdate(
       { campaignId },
       {
@@ -79,7 +78,7 @@ export const verifyAdvancePayment = async (req, res) => {
       { new: true, upsert: true }
     );
 
-    // ✅ 2. Update Campaign (THIS WAS MISSING 🔥)
+
     await Campaign.findByIdAndUpdate(campaignId, {
       status: "advance_paid",
       paymentId: payment._id,

@@ -54,7 +54,7 @@ const paymentSchema = new mongoose.Schema(
           enum: ["advance", "final"],
         },
         amount: Number,
-        paymentId: String, // Razorpay/Stripe ID
+        paymentId: String,
         status: String,
         paidAt: Date,
       },
