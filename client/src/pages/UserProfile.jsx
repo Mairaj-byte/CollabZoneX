@@ -42,6 +42,8 @@ const MyProfile = () => {
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState(null);
 
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
   useEffect(() => {
     const fetchProfileData = async () => {
       if (!token) return;
@@ -51,14 +53,14 @@ const MyProfile = () => {
 
         
         if (identity === "brand") {
-          const res = await fetch("http://localhost:4000/api/brand/me", {
+          const res = await fetch(`${backendUrl}/api/brand/me`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           const json = await res.json();
           if (json.success) data = json.data;
 
         } else if (identity === "creator") {
-          const res = await fetch("http://localhost:4000/api/creator/me", {
+          const res = await fetch(`${backendUrl}/api/creator/me`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           const json = await res.json();
